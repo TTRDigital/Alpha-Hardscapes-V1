@@ -6,15 +6,8 @@ export const structure: StructureResolver = (S) =>
     .title("Alpha Hardscapes")
     .items([
       S.listItem().title("Site settings").id("siteSettings").child(S.document().schemaType("siteSettings").documentId("siteSettings")),
-      S.listItem().title("Home page").id("homePage").child(S.document().schemaType("homePage").documentId("homePage")),
-      S.listItem().title("About page").id("aboutPage").child(S.document().schemaType("aboutPage").documentId("aboutPage")),
       S.divider(),
-      S.documentTypeListItem("service").title("Services"),
-      S.documentTypeListItem("project").title("Projects & gallery"),
-      S.documentTypeListItem("testimonial").title("Reviews"),
-      S.documentTypeListItem("faq").title("FAQs"),
-      S.documentTypeListItem("serviceArea").title("Service areas"),
+      S.documentTypeListItem("page").title("Pages"),
       S.documentTypeListItem("post").title("Blog posts"),
-      S.divider(),
-      S.documentTypeListItem("page").title("Other pages (privacy, terms...)"),
+      S.documentTypeListItem("archive").title("Blog list pages"),
     ]);

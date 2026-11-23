@@ -1,5 +1,6 @@
 /**
- * Seeds Sanity with the built-in content (content/fallback) and uploads the photos.
+ * Seeds Sanity with the built-in copy of the live site (content/site.ts: every page, post and
+ * blog list, menus, forms and business details) and uploads the photos.
  *
  *   npm run seed           adds documents that do not exist yet (safe to re-run)
  *   npm run seed -- --force  overwrites every seeded document with the built-in copy
@@ -12,8 +13,8 @@ import { createClient, type SanityClient } from "@sanity/client";
 import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import * as fb from "../content/fallback/index.ts";
-import type { Img } from "../lib/types.ts";
+import { fallbackPages, fallbackSettings } from "../content/site.ts";
+import type { Atom, Img, Page, Section } from "../lib/types.ts";
 
 const args = new Set(process.argv.slice(2));
 const DRY = args.has("--dry-run");
@@ -54,7 +55,7 @@ async function uploadImage(img: Img): Promise<string | null> {
     return id;
   }
   const buffer = await readFile(file);
-  const asset = await client.assets.upload("image", buffer, { filename: path.basename(img.src), contentType: img.src.endsWith(".png") ? "image/png" : "image/webp" });
+  const asset = await client.assets.upload("image", buffer, { filename: path.basename(img.src), contentType: img.src.endsWith(".png") ? "image/png" : img.src.endsWith(".jpg") ? "image/jpeg" : "image/webp" });
   assetCache.set(img.src, asset._id);
   process.stdout.write(".");
   return asset._id;
@@ -64,7 +65,7 @@ async function photo(img?: Img | null) {
   if (!img) return undefined;
   const id = await uploadImage(img);
   if (!id) return undefined;
-  return { _type: "photo", _key: key(), asset: ref(id), alt: img.alt || "", ...(img.caption ? { caption: img.caption } : {}) };
+  return { _type: "photo", _key: key(), asset: ref(id), alt: img.alt || "", ...(img.caption ? { caption: img.caption } : {}) } as Record<string, unknown>;
 }
 
 async function logo(img?: Img | null) {
@@ -82,102 +83,69 @@ async function photos(list?: Img[]) {
   return out;
 }
 
-/** Rich text: upload inline photos and make sure every block has a key. */
-async function rich(blocks?: unknown[]) {
+/** Rich text: make sure every block and span has a key. */
+function rich(blocks?: unknown[]) {
   if (!blocks) return undefined;
+  return (blocks as Record<string, unknown>[]).map((b) => ({ _key: key(), ...b }));
+}
+
+async function atom(a: Atom): Promise<Record<string, unknown> | null> {
+  switch (a._type) {
+    case "img": { const image = await photo(a.image); return image ? { ...a, image: { ...image, _key: undefined } } : null; }
+    case "gallery": return { ...a, images: await photos(a.images) };
+    case "rt": return { ...a, body: rich(a.body) };
+    case "box": return { ...a, ...(a.body ? { body: rich(a.body) } : {}) };
+    case "list": return { ...a, items: a.items.map((i) => ({ ...i, _type: "listItem", body: rich(i.body) })) };
+    case "faq": return { ...a, items: a.items.map((i) => ({ ...i, _type: "faqItem", answer: rich(i.answer) })) };
+    case "reviews": return { ...a, items: a.items.map((i) => ({ ...i, _type: "review" })) };
+    default: return { ...a };
+  }
+}
+
+async function sections(list: Section[]) {
   const out = [];
-  for (const b of blocks as Record<string, unknown>[]) {
-    if (b._type === "photo") {
-      const p = await photo({ src: String(b.src), alt: String(b.alt || "") });
-      if (p) out.push(p);
-      continue;
-    }
-    out.push({ _key: key(), ...b });
+  for (const s of list) {
+    const atoms = [];
+    for (const a of s.atoms) { const x = await atom(a); if (x) atoms.push(x); }
+    out.push({ _type: "section", _key: s._key || key(), atoms });
   }
   return out;
 }
 
-const seoOf = async (seo?: { title?: string; description?: string; image?: Img | null; noIndex?: boolean }) =>
-  seo ? { title: seo.title, description: seo.description, image: await photo(seo.image), noIndex: seo.noIndex ?? false } : undefined;
+async function seoOf(p: Page) {
+  const { ogImage, ...rest } = p.seo;
+  const img = ogImage && !ogImage.startsWith("http") ? await photo({ src: ogImage, alt: "" }) : undefined;
+  return { _type: "seo", ...rest, ...(img ? { ogImage: { ...img, _key: undefined } } : {}) };
+}
+
+const docId = (p: Page) => (p._id.startsWith("drafts.") ? p._id.slice(7) : p._id).replace(/[^a-zA-Z0-9._-]/g, "-");
+const navWithKeys = (items: { label: string; href: string; children?: unknown[] }[]): unknown[] =>
+  items.map((i) => ({ _key: key(), label: i.label, href: i.href, ...(i.children?.length ? { children: navWithKeys(i.children as never) } : {}) }));
 
 async function buildDocuments() {
   const docs: Record<string, unknown>[] = [];
-  const s = fb.settings;
+  const s = fallbackSettings;
   console.log("Site settings");
   docs.push({
     _id: "siteSettings", _type: "siteSettings",
-    businessName: s.businessName, legalName: s.legalName, tagline: s.tagline, description: s.description,
-    logo: await logo(s.logo), logoLight: await logo(s.logoLight),
-    foundedYear: s.foundedYear, yearsExperience: s.yearsExperience, licenseText: s.licenseText, serviceAreaSummary: s.serviceAreaSummary,
-    phone: s.phone, phoneE164: s.phoneE164, email: s.email, address: s.address, hours: withKeys(s.hours),
-    facebook: s.facebook, instagram: s.instagram, googleBusinessUrl: s.googleBusinessUrl, googleReviewUrl: s.googleReviewUrl, googleRating: s.googleRating, googleReviewCount: s.googleReviewCount,
-    headerLinks: withKeys(s.headerLinks), footerLinks: withKeys(s.footerLinks),
-    ctaPrimary: s.ctaPrimary, ctaSecondary: s.ctaSecondary, ctaBandTitle: s.ctaBandTitle, ctaBandText: s.ctaBandText, formThankYouPath: s.formThankYouPath,
-    seo: await seoOf(s.seo),
+    businessName: s.businessName, phone: s.phone, phoneE164: s.phoneE164, email: s.email, locality: s.locality, region: s.region, postalCode: s.postalCode,
+    hours: withKeys(s.hours), areaServed: s.areaServed, socials: withKeys(s.socials),
+    headerNav: navWithKeys(s.headerNav), headerCta: s.headerCta, footerNav: navWithKeys(s.footerNav), popupHeading: s.popupHeading,
+    forms: s.forms.map((f) => ({ _key: key(), ...f, fields: withKeys(f.fields) })),
+    authors: withKeys(s.authors),
+    heroPoster: await logo(s.heroPoster), logo: await logo(s.logo), logoLight: await logo(s.logoLight),
   });
-
-  console.log("Services");
-  for (const sv of fb.services) {
-    docs.push({
-      _id: sv._id, _type: "service", title: sv.title, shortTitle: sv.shortTitle, slug: { _type: "slug", current: sv.slug }, category: sv.category,
-      excerpt: sv.excerpt, heroImage: await photo(sv.heroImage), eyebrow: sv.eyebrow, heading: sv.heading, intro: sv.intro,
-      highlights: withKeys(sv.highlights), body: await rich(sv.body), gallery: await photos(sv.gallery), faqs: withKeys(sv.faqs),
-      materials: sv.materials, startingNote: sv.startingNote, featured: sv.featured ?? false, order: sv.order ?? 50,
-      relatedServices: withKeys(fb.withRelated(sv).relatedServices?.map((r) => ref(r._id))), seo: await seoOf(sv.seo),
-    });
+  console.log(`Pages, posts and blog lists (${fallbackPages.length})`);
+  for (const p of fallbackPages) {
+    const base = { _id: docId(p), title: p.title, path: p.path, sections: await sections(p.sections), seo: await seoOf(p) };
+    if (p.kind === "post") {
+      docs.push({ ...base, _type: "post", date: p.date, modified: p.modified, author: p.author, authorSlug: p.authorSlug, categories: p.categories, excerpt: p.excerpt, featuredImage: await photo(p.featuredImage) });
+    } else if (p.kind === "archive") {
+      docs.push({ ...base, _type: "archive", archive: p.archive, heading: p.heading, category: p.category, author: p.author, authorSlug: p.authorSlug });
+    } else {
+      docs.push({ ...base, _type: "page", heroImage: await photo(p.heroImage) });
+    }
   }
-
-  console.log("Projects");
-  for (const p of fb.projects) {
-    docs.push({
-      _id: p._id, _type: "project", title: p.title, slug: { _type: "slug", current: p.slug }, town: p.town, summary: p.summary,
-      services: withKeys(p.services?.map((sv) => ref(`service-${sv.slug}`))), body: await rich(p.body),
-      coverImage: await photo(p.coverImage), images: await photos(p.images), beforeImage: await photo(p.beforeImage), afterImage: await photo(p.afterImage),
-      materials: p.materials, completedAt: p.completedAt, featured: p.featured ?? false, order: p.order ?? 50, seo: await seoOf(p.seo),
-    });
-  }
-
-  console.log("Reviews");
-  for (const t of fb.testimonials) {
-    docs.push({ _id: t._id, _type: "testimonial", name: t.name, quote: t.quote, rating: t.rating ?? 5, source: t.source, sourceUrl: t.sourceUrl, town: t.town, service: t.service ? ref(`service-${t.service.slug}`) : undefined, avatar: await logo(t.avatar), date: t.date, featured: t.featured ?? false, order: t.order ?? 50 });
-  }
-
-  console.log("FAQs");
-  for (const f of fb.faqs) docs.push({ _id: f._id, _type: "faq", question: f.question, answer: f.answer, category: f.category, showOnHome: f.showOnHome ?? false, order: f.order ?? 50 });
-
-  console.log("Service areas");
-  for (const a of fb.areas) {
-    docs.push({
-      _id: a._id, _type: "serviceArea", name: a.name, slug: { _type: "slug", current: a.slug }, kind: a.kind, county: a.county ? ref(`area-${a.county.slug}`) : undefined,
-      heading: a.heading, intro: a.intro, body: await rich(a.body), highlights: withKeys(a.highlights), towns: a.towns, neighborhoods: a.neighborhoods,
-      image: await photo(a.image), mapQuery: a.mapQuery, projects: withKeys(a.projects?.map((p) => ref(p._id))), faqs: withKeys(a.faqs), order: a.order ?? 50, seo: await seoOf(a.seo),
-    });
-  }
-
-  console.log("Blog posts");
-  for (const p of fb.posts) {
-    docs.push({
-      _id: p._id, _type: "post", title: p.title, slug: { _type: "slug", current: p.slug }, publishedAt: p.publishedAt, updatedAt: p.updatedAt, author: p.author, excerpt: p.excerpt,
-      featuredImage: await photo(p.featuredImage), body: await rich(p.body as unknown[]), relatedService: p.relatedService ? ref(`service-${p.relatedService}`) : undefined, faqs: withKeys(p.faqs), seo: await seoOf(p.seo),
-    });
-  }
-
-  console.log("Pages");
-  for (const p of fb.pages) docs.push({ _id: p._id, _type: "page", title: p.title, slug: { _type: "slug", current: p.slug }, intro: p.intro, body: await rich(p.body), seo: await seoOf(p.seo) });
-
-  console.log("Home & about");
-  const h = fb.homePage;
-  docs.push({
-    _id: "homePage", _type: "homePage", eyebrow: h.eyebrow, heading: h.heading, subheading: h.subheading, heroImage: await photo(h.heroImage), heroVideoUrl: h.heroVideoUrl, reelVideoUrl: h.reelVideoUrl, reelPosterUrl: h.reelPosterUrl,
-    trustPoints: h.trustPoints, stats: withKeys(h.stats), servicesHeading: h.servicesHeading, servicesText: h.servicesText,
-    featuredServices: withKeys(fb.services.filter((x) => x.featured).map((x) => ref(x._id))), projectsHeading: h.projectsHeading, projectsText: h.projectsText,
-    featuredProjects: withKeys(fb.projects.filter((x) => x.featured).map((x) => ref(x._id))), aboutHeading: h.aboutHeading, aboutText: h.aboutText, aboutImage: await photo(h.aboutImage),
-    whyHeading: h.whyHeading, whyItems: withKeys(h.whyItems), processHeading: h.processHeading, processText: h.processText, processSteps: withKeys(h.processSteps),
-    reviewsHeading: h.reviewsHeading, areasHeading: h.areasHeading, areasText: h.areasText, faqHeading: h.faqHeading, seo: await seoOf(h.seo),
-  });
-  const a = fb.aboutPage;
-  docs.push({ _id: "aboutPage", _type: "aboutPage", heading: a.heading, intro: a.intro, heroImage: await photo(a.heroImage), founderName: a.founderName, founderTitle: a.founderTitle, founderBio: await rich(a.founderBio), founderImage: await photo(a.founderImage), values: withKeys(a.values), body: await rich(a.body), seo: await seoOf(a.seo) });
-
   return docs.map(clean);
 }
 

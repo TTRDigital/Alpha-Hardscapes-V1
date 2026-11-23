@@ -34,6 +34,7 @@ const components: PortableTextComponents = {
     link: ({ value, children }) => {
       const href: string = value?.href || "#";
       const external = /^https?:\/\//.test(href) && !href.includes("alphahardscapes.com");
+      if (/^(tel|mailto):/.test(href) || href.startsWith("#")) return <a href={href}>{children}</a>;
       return external || value?.newTab ? (
         <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>
       ) : (
@@ -54,10 +55,10 @@ function slugify(block: { children?: { text?: string }[] }) {
   return (block.children || []).map((c) => c.text || "").join("").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
 }
 
-export function RichText({ value, className = "" }: { value?: RichTextT; className?: string }) {
+export function RichText({ value, className = "", plain = false }: { value?: RichTextT; className?: string; plain?: boolean }) {
   if (!value?.length) return null;
   return (
-    <div className={`prose-site ${className}`}>
+    <div className={`${plain ? "" : "prose-site"} ${className}`}>
       <PortableText value={value} components={components} />
     </div>
   );

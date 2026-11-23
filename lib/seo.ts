@@ -1,88 +1,125 @@
 import type { Metadata } from "next";
-import type { Img, Seo, SiteSettings } from "@/lib/types";
-import { absUrl, SITE_URL } from "./site.ts";
+import type { Atom, Page, RichText, SiteSettings } from "@/lib/types";
+import { absUrl, plainText, SITE_URL } from "./site.ts";
 
-type Opts = {
-  title: string;
-  description?: string;
-  path: string;
-  seo?: Seo;
-  image?: Img | null;
-  type?: "website" | "article";
-  publishedTime?: string;
-  modifiedTime?: string;
-  settings?: SiteSettings;
-};
+const atomsOf = (p: Page): Atom[] => p.sections.flatMap((s) => s.atoms);
 
-/** Builds Next.js metadata from a page's SEO fields with sensible defaults. */
-export function buildMetadata({ title, description, path, seo, image, type = "website", publishedTime, modifiedTime, settings }: Opts): Metadata {
-  const business = settings?.businessName || "Alpha Hardscapes";
-  // Keep titles under ~65 characters: drop the brand suffix when it would push the title over.
-  const withBrand = title.includes(business) ? title : `${title} | ${business}`;
-  const t = seo?.title || (withBrand.length <= 65 ? withBrand : title);
-  const d = seo?.description || description || settings?.seo?.description || "";
-  const img = seo?.image || image || null;
-  const url = absUrl(path);
+/** First paragraph of the page (its own words), for pages that have no meta description yet. */
+export function firstText(p: Page): string {
+  for (const a of atomsOf(p)) if (a._type === "rt") { const t = plainText(a.body as never); if (t.length > 40) return t; }
+  return "";
+}
+
+function clip(s: string, n = 158) {
+  if (s.length <= n) return s;
+  const cut = s.slice(0, n - 1);
+  return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+}
+
+export const isNoindex = (p: Pick<Page, "seo">) => /noindex/i.test(p.seo?.robots || "");
+
+/** Title, description, canonical (always the page's own https address), robots and share tags. */
+export function pageMetadata(p: Page, settings: SiteSettings): Metadata {
+  const brand = settings.businessName;
+  const title = p.seo.title || (`${p.title} | ${brand}`.length <= 60 ? `${p.title} | ${brand}` : p.title);
+  const description = p.seo.description || (/noindex/i.test(p.seo.robots || "") ? "" : clip(p.excerpt || firstText(p)));
+  const url = absUrl(p.path);
+  const noindex = isNoindex(p);
+  const ogImage = p.seo.ogImage || settings.defaultOgImage;
+  const article = p.kind === "post";
   return {
-    title: t,
-    description: d,
+    title: { absolute: title },
+    description: description || undefined,
     alternates: { canonical: url },
-    robots: seo?.noIndex ? { index: false, follow: false } : undefined,
+    robots: noindex ? { index: false, follow: false } : { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
     openGraph: {
-      title: t,
-      description: d,
+      title: p.seo.ogTitle || title,
+      description: p.seo.ogDescription || description || undefined,
       url,
-      siteName: business,
-      type,
+      siteName: brand,
       locale: "en_US",
-      ...(publishedTime ? { publishedTime } : {}),
-      ...(modifiedTime ? { modifiedTime } : {}),
-      images: img ? [{ url: img.src.startsWith("http") ? img.src : absUrl(img.src), width: img.width, height: img.height, alt: img.alt }] : undefined,
+      type: article ? "article" : "website",
+      ...(article && p.date ? { publishedTime: p.date, modifiedTime: p.modified || p.date, authors: p.author ? [p.author] : undefined } : {}),
+      images: ogImage ? [{ url: ogImage.startsWith("http") ? ogImage : absUrl(ogImage), width: 1200, height: 630 }] : undefined,
     },
-    twitter: { card: "summary_large_image", title: t, description: d },
+    twitter: { card: "summary_large_image", title: p.seo.ogTitle || title, description: p.seo.ogDescription || description || undefined },
   };
 }
 
+/** The business, on every page. Town and ZIP only; no ratings or reviews markup. */
 export function businessJsonLd(s: SiteSettings) {
-  const addr = s.address;
   return {
     "@context": "https://schema.org",
-    "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
+    "@type": "HomeAndConstructionBusiness",
     "@id": `${SITE_URL}/#business`,
     name: s.businessName,
-    legalName: s.legalName,
-    url: SITE_URL,
-    telephone: s.phoneE164,
-    email: s.email,
-    description: s.description,
-    image: absUrl("/images/gallery/patio-1804.webp"),
+    url: `${SITE_URL}/`,
     logo: absUrl("/images/brand/icon-512.png"),
-    priceRange: "$$",
-    address: addr ? { "@type": "PostalAddress", ...(addr.showStreet ? { streetAddress: addr.street } : {}), addressLocality: addr.city, addressRegion: addr.state, postalCode: addr.zip, addressCountry: "US" } : undefined,
-    areaServed: ["New Haven County, CT", "Hartford County, CT", "Fairfield County, CT"].map((name) => ({ "@type": "AdministrativeArea", name })),
-    sameAs: [s.facebook, s.instagram, s.googleBusinessUrl].filter(Boolean),
-    openingHoursSpecification: (s.hours || [])
-      .filter((h) => !/closed/i.test(h.hours))
-      .map((h) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: daysOf(h.days), opens: timeOf(h.hours, 0), closes: timeOf(h.hours, 1) })),
-    ...(s.googleRating ? { aggregateRating: { "@type": "AggregateRating", ratingValue: s.googleRating, bestRating: 5, ...(s.googleReviewCount ? { reviewCount: s.googleReviewCount } : { ratingCount: 10 }) } } : {}),
+    image: absUrl(s.defaultOgImage || "/og/home.jpg"),
+    telephone: s.phoneE164,
+    ...(s.email ? { email: s.email } : {}),
+    address: { "@type": "PostalAddress", addressLocality: s.locality, addressRegion: s.region, postalCode: s.postalCode, addressCountry: "US" },
+    openingHoursSpecification: s.hours.map((h) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: h.days, opens: h.opens, closes: h.closes })),
+    areaServed: s.areaServed.map((name) => ({ "@type": /County/.test(name) ? "AdministrativeArea" : "City", name })),
+    sameAs: s.socials.map((x) => x.href),
   };
 }
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-function daysOf(label: string) {
-  const m = label.match(/(\w+day)\s*(?:to|-|–)\s*(\w+day)/i);
-  if (m) { const a = DAYS.indexOf(cap(m[1])), b = DAYS.indexOf(cap(m[2])); if (a >= 0 && b >= a) return DAYS.slice(a, b + 1); }
-  const single = DAYS.find((d) => label.toLowerCase().includes(d.toLowerCase()));
-  return single ? [single] : DAYS.slice(0, 5);
+export function breadcrumbJsonLd(p: Page, titleOf: (path: string) => string | undefined) {
+  const parts = p.path.split("/").filter(Boolean);
+  const items = [{ name: "Home", path: "/" }];
+  for (let i = 1; i < parts.length; i++) {
+    const path = `/${parts.slice(0, i).join("/")}/`;
+    const t = titleOf(path);
+    if (t) items.push({ name: t, path });
+  }
+  if (p.path !== "/") items.push({ name: p.title, path: p.path });
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, item: absUrl(it.path) })),
+  };
 }
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-function timeOf(hours: string, idx: number) {
-  const parts = hours.split(/\s*(?:to|-|–)\s*/);
-  const p = parts[idx] || "";
-  const m = p.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?/i);
-  if (!m) return undefined;
-  let h = Number(m[1]);
-  if (m[3]?.toUpperCase() === "PM" && h < 12) h += 12;
-  if (m[3]?.toUpperCase() === "AM" && h === 12) h = 0;
-  return `${String(h).padStart(2, "0")}:${m[2] || "00"}`;
+
+/** Questions and answers that are visible on the page: FAQ blocks, or a post's FAQ section (H3 questions under an FAQ heading). */
+export function visibleFaqs(p: Page): { q: string; a: string }[] {
+  const out: { q: string; a: string }[] = [];
+  for (const a of atomsOf(p)) if (a._type === "faq") for (const it of a.items) { const ans = plainText(it.answer as never); if (it.question && ans) out.push({ q: it.question, a: ans }); }
+  if (out.length || p.kind !== "post") return out;
+  const blocks = atomsOf(p).flatMap((a) => (a._type === "rt" ? a.body : [])) as RichText;
+  let inFaq = false; let cur: { q: string; a: string } | null = null;
+  const text = (b: unknown) => plainText([b] as never);
+  for (const b of blocks as { style?: string }[]) {
+    const t = text(b);
+    if (b.style === "h2") { if (cur?.a) out.push(cur); cur = null; inFaq = /faq|frequently asked|questions/i.test(t); continue; }
+    if (!inFaq) continue;
+    if ((b.style === "h3" || b.style === "h4") && /\?\s*$/.test(t)) { if (cur?.a) out.push(cur); cur = { q: t, a: "" }; continue; }
+    if (cur && (!b.style || b.style === "normal")) cur.a = `${cur.a} ${t}`.trim();
+  }
+  if (cur?.a) out.push(cur);
+  return out;
+}
+
+export function faqJsonLd(faqs: { q: string; a: string }[]) {
+  return { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+}
+
+export function postJsonLd(p: Page, s: SiteSettings) {
+  const img = p.featuredImage || p.heroImage;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: p.title,
+    mainEntityOfPage: absUrl(p.path),
+    datePublished: p.date,
+    dateModified: p.modified || p.date,
+    author: { "@type": "Person", name: p.author || s.businessName, ...(p.authorSlug ? { url: absUrl(`/author/${p.authorSlug}/`) } : {}) },
+    publisher: { "@id": `${SITE_URL}/#business` },
+    ...(img ? { image: img.src.startsWith("http") ? img.src : absUrl(img.src) } : {}),
+    ...(p.seo.description ? { description: p.seo.description } : {}),
+  };
+}
+
+export function webPageJsonLd(p: Page, description?: string) {
+  return { "@context": "https://schema.org", "@type": "WebPage", "@id": absUrl(p.path), url: absUrl(p.path), name: p.seo.title || p.title, ...(description ? { description } : {}), isPartOf: { "@type": "WebSite", url: `${SITE_URL}/`, name: "Alpha Hardscapes" }, about: { "@id": `${SITE_URL}/#business` } };
 }

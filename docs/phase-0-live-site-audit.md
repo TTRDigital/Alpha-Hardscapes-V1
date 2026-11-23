@@ -11,7 +11,7 @@
 | Owner | Sebastian Ullrich (founder) |
 | Phone | (475) 227-6896 |
 | Email | alphahardscapes1@gmail.com |
-| Address | 1813 Peck Ln, Cheshire, CT 06410 (street not shown publicly on the old site; the schema used a New Haven placeholder) |
+| Location shown | New Haven, CT 06510 (town and ZIP only, never a street address) |
 | Hours (from the old schema) | Mon–Fri 8:00–17:00, Sat 9:00–13:00 |
 | Social | facebook.com/AlphaHardscapes, instagram.com/alphahardscapes |
 | Google | Business profile maps.app.goo.gl/FgHxbjYRenueVuuf7 · Write-a-review maps.app.goo.gl/pLz1Aie8pkVUstaf7 |

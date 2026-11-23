@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-/** Image with required alt text (used everywhere a photo appears). */
+/** Image with alt text (used everywhere a photo appears). Real project photos only. */
 export const photo = defineType({
   name: "photo",
   title: "Photo",
@@ -11,44 +11,44 @@ export const photo = defineType({
       name: "alt",
       title: "Alt text",
       type: "string",
-      description: "Describe the photo in one sentence for screen readers and Google (e.g. 'Bluestone patio with fire pit in Cheshire').",
+      description: "Describe the photo in one sentence for screen readers and Google (e.g. 'Paver patio with seat wall in Cheshire'). Leave empty only for decorative images.",
       validation: (r) => r.max(160),
     }),
     defineField({ name: "caption", title: "Caption (optional)", type: "string" }),
   ],
 });
 
-/** Search-engine fields shared by every page-like document. */
+/** Search fields. The live site's values were carried over; keep the target search in the title. */
 export const seo = defineType({
   name: "seo",
   title: "SEO",
   type: "object",
-  options: { collapsible: true, collapsed: true },
+  options: { collapsible: true, collapsed: false },
   fields: [
-    defineField({
-      name: "title",
-      title: "Title tag",
-      type: "string",
-      description: "50 to 60 characters. Leave empty to use the page title.",
-      validation: (r) => r.max(70).warning("Google shows about 60 characters"),
-    }),
-    defineField({
-      name: "description",
-      title: "Meta description",
-      type: "text",
-      rows: 3,
-      description: "120 to 160 characters. Leave empty to use the page summary.",
-      validation: (r) => r.max(170).warning("Google shows about 155 characters"),
-    }),
-    defineField({ name: "image", title: "Share image (1200x630)", type: "photo" }),
-    defineField({ name: "noIndex", title: "Hide from search engines", type: "boolean", initialValue: false }),
+    defineField({ name: "title", title: "Title tag", type: "string", description: "30 to 60 characters, ending with “Alpha Hardscapes” where it fits. Keep the page's target search in it.", validation: (r) => r.max(70).warning("Google shows about 60 characters") }),
+    defineField({ name: "description", title: "Meta description", type: "text", rows: 3, description: "110 to 160 characters naming the service and the area.", validation: (r) => r.max(170).warning("Google shows about 155 characters") }),
+    defineField({ name: "ogTitle", title: "Share title (optional)", type: "string" }),
+    defineField({ name: "ogDescription", title: "Share description (optional)", type: "text", rows: 2 }),
+    defineField({ name: "ogImage", title: "Share image (1200x630, optional)", type: "photo" }),
+    defineField({ name: "canonical", title: "Canonical URL (optional)", type: "url", description: "Leave empty: the page's own address is used." }),
+    defineField({ name: "robots", title: "Robots", type: "string", description: "Leave empty for normal pages. Thank-you and ad pages use “noindex, nofollow”.", options: { list: ["noindex, nofollow"] } }),
   ],
 });
 
-/** Rich text used in long-form content (service pages, posts, areas, legal pages). */
+const linkAnnotation = {
+  name: "link",
+  type: "object",
+  title: "Link",
+  fields: [
+    defineField({ name: "href", title: "Address", type: "string", description: "A page on this site like /masonry/, or a full https:// link.", validation: (r) => r.required() }),
+    defineField({ name: "newTab", title: "Open in new tab", type: "boolean", initialValue: false }),
+  ],
+};
+
+/** Rich text: paragraphs, headings, lists, bold, italic and links. */
 export const richText = defineType({
   name: "richText",
-  title: "Rich text",
+  title: "Text",
   type: "array",
   of: [
     defineArrayMember({
@@ -69,96 +69,40 @@ export const richText = defineType({
           { title: "Bold", value: "strong" },
           { title: "Italic", value: "em" },
         ],
-        annotations: [
-          {
-            name: "link",
-            type: "object",
-            title: "Link",
-            fields: [
-              defineField({ name: "href", title: "URL or path", type: "string", validation: (r) => r.required() }),
-              defineField({ name: "newTab", title: "Open in new tab", type: "boolean", initialValue: false }),
-            ],
-          },
-        ],
+        annotations: [linkAnnotation],
       },
     }),
-    defineArrayMember({ type: "photo" }),
-    defineArrayMember({
-      type: "object",
-      name: "callout",
-      title: "Call-out box",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "text", title: "Text", type: "text", rows: 3 }),
-      ],
-      preview: { select: { title: "title", subtitle: "text" } },
-    }),
-    defineArrayMember({
-      type: "object",
-      name: "table",
-      title: "Table",
-      fields: [
-        defineField({
-          name: "rows",
-          title: "Rows",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              name: "row",
-              fields: [defineField({ name: "cells", title: "Cells", type: "array", of: [{ type: "string" }] })],
-              preview: { select: { cells: "cells" }, prepare: ({ cells }: { cells?: string[] }) => ({ title: (cells || []).join(" | ") }) },
+  ],
+});
+
+/** Menu item (two levels of sub-items). */
+export const navItem = defineType({
+  name: "navItem",
+  title: "Menu item",
+  type: "object",
+  fields: [
+    defineField({ name: "label", type: "string", validation: (r) => r.required() }),
+    defineField({ name: "href", title: "Address", type: "string", description: "e.g. /masonry/ (use # for a heading that only opens its sub-menu)", validation: (r) => r.required() }),
+    defineField({
+      name: "children",
+      title: "Sub-items",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "navChild",
+          fields: [
+            defineField({ name: "label", type: "string", validation: (r) => r.required() }),
+            defineField({ name: "href", title: "Address", type: "string", validation: (r) => r.required() }),
+            defineField({
+              name: "children",
+              title: "Sub-items",
+              type: "array",
+              of: [defineArrayMember({ type: "object", name: "navGrandchild", fields: [defineField({ name: "label", type: "string" }), defineField({ name: "href", title: "Address", type: "string" })] })],
             }),
           ],
         }),
       ],
-      preview: { prepare: () => ({ title: "Table" }) },
     }),
   ],
-});
-
-/** Question + answer pair embedded on pages (the FAQ document type is for the global FAQ page). */
-export const faqItem = defineType({
-  name: "faqItem",
-  title: "Question",
-  type: "object",
-  fields: [
-    defineField({ name: "question", title: "Question", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "answer", title: "Answer", type: "text", rows: 4, validation: (r) => r.required() }),
-  ],
-  preview: { select: { title: "question" } },
-});
-
-/** Short title + text pair (highlights, benefits, values, process steps). */
-export const feature = defineType({
-  name: "feature",
-  title: "Item",
-  type: "object",
-  fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "text", title: "Text", type: "text", rows: 3 }),
-    defineField({
-      name: "icon",
-      title: "Icon",
-      type: "string",
-      options: {
-        list: [
-          "patio", "wall", "steps", "kitchen", "fire", "pool", "deck", "chimney", "veneer", "repair", "leaf", "snow", "plant", "design",
-          "check", "shield", "clock", "star", "map", "phone", "ruler", "hammer", "truck", "leafcheck",
-        ],
-      },
-    }),
-  ],
-  preview: { select: { title: "title", subtitle: "text" } },
-});
-
-export const link = defineType({
-  name: "link",
-  title: "Link",
-  type: "object",
-  fields: [
-    defineField({ name: "label", title: "Label", type: "string", validation: (r) => r.required() }),
-    defineField({ name: "href", title: "Path or URL", type: "string", description: "e.g. /services/paver-patios/ or https://...", validation: (r) => r.required() }),
-  ],
-  preview: { select: { title: "label", subtitle: "href" } },
 });

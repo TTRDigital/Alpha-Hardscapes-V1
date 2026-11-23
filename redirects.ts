@@ -1,97 +1,45 @@
+import wordpress from "./content/redirects.json" with { type: "json" };
+
 /**
- * 301 redirects from the old site's addresses to the new structure, so search
- * rankings and existing links carry over. Next.js applies them at the edge.
+ * 301 redirects carried over from WordPress: the redirects the live site
+ * answered for old/alternative URLs (collected by probing it), so old
+ * backlinks and indexed URLs keep landing on the right page. Unknown URLs
+ * whose last part matches a page are also redirected at request time
+ * (lib/site/guess.ts), like WordPress did.
  */
-type R = { source: string; destination: string; permanent: boolean };
-const r = (source: string, destination: string): R => ({ source, destination, permanent: true });
+type Row = { source: string; destination: string; query?: Record<string, string> };
 
-const SERVICES: Record<string, string> = {
-  "/walkway-patio-connecticut": "paver-patios-walkways",
-  "/masonry/walkway-patio-masonry": "paver-patios-walkways",
-  "/masonry/walkway-patio-masonry-optin": "paver-patios-walkways",
-  "/retaining-walls-connecticut": "retaining-walls",
-  "/stone": "retaining-walls",
-  "/wall-block": "retaining-walls",
-  "/masonry/retaining-walls": "retaining-walls",
-  "/masonry/retaining-walls/stone": "retaining-walls",
-  "/masonry/retaining-walls/stone-3": "retaining-walls",
-  "/masonry/retaining-walls/wall-block": "retaining-walls",
-  "/masonry/retaining-walls/wall-block-2": "retaining-walls",
-  "/stone-steps-connecticut": "stone-steps",
-  "/outdoor-kitchens-connecticut": "outdoor-kitchens",
-  "/fire-features-connecticut": "fire-pits-fireplaces",
-  "/pool-builders-south-connecticut": "pool-patios",
-  "/deck-builders-connecticut": "decks",
-  "/outdoor-living-packages-connecticut": "outdoor-living-packages",
-  "/chimney-installation-and-repair-connecticut": "chimneys",
-  "/thinstone-connecticut": "stone-veneer",
-  "/repairs-maintenance-connecticut": "paver-repair-maintenance",
-  "/masonry/repairs-maintenance": "paver-repair-maintenance",
-  "/landscaping": "landscaping",
-  "/seasonal-clean-up": "seasonal-cleanup",
-  "/seasonal-clean-up/snow-removal": "seasonal-cleanup",
-  "/seasonal-clean-up/leaf-removal": "seasonal-cleanup",
-};
-
-const AREAS: Record<string, string> = {
-  "/new-haven-county-ct": "new-haven-county",
-  "/hartford-county-ct": "hartford-county",
-  "/fairfield-county-ct": "fairfield-county",
-  "/service-areas/new-haven-county-ct": "new-haven-county",
-  "/service-areas/hartford-county-ct": "hartford-county",
-  "/service-areas/fairfield-county-ct": "fairfield-county",
-  "/avon": "avon",
-  "/berlin": "berlin",
-  "/farmington": "farmington",
-  "/glastonbury": "glastonbury",
-  "/southington": "southington",
-  "/uncategorized/west-hartford": "west-hartford",
-  "/service-areas/hartford-county-ct/avon": "avon",
-  "/service-areas/hartford-county-ct/berlin": "berlin",
-  "/service-areas/hartford-county-ct/farmington": "farmington",
-  "/service-areas/hartford-county-ct/glastonbury": "glastonbury",
-  "/service-areas/hartford-county-ct/southington": "southington",
-  "/service-areas/hartford-county-ct/west-hartford": "west-hartford",
-};
-
-export const redirects: R[] = [
-  ...Object.entries(SERVICES).map(([from, slug]) => r(from, `/services/${slug}/`)),
-  ...Object.entries(AREAS).map(([from, slug]) => r(from, `/service-areas/${slug}/`)),
-  r("/masonry", "/services/"),
-  r("/gallery", "/projects/"),
-  r("/about-us", "/about/"),
-  r("/frequently-asked-questions", "/faq/"),
-  r("/faq-2", "/faq/"),
-  r("/locations", "/service-areas/"),
-  r("/terms-and-conditions", "/terms/"),
-  r("/contact-us", "/contact/"),
-  r("/category/blog", "/blog/"),
-  r("/category/uncategorized", "/blog/"),
-  r("/author/:slug", "/blog/"),
-  r("/uncategorized/:slug", "/blog/:slug/"),
-  r("/feed", "/blog/"),
-  r("/home-draft", "/"),
-  r("/landing-page", "/contact/"),
-  // Thank-you pages from the old forms
-  r("/thank-you-:rest", "/thank-you/"),
-  r("/optin-thank-you", "/thank-you/"),
-  r("/thank-you-lp", "/thank-you/"),
-  // Google Ads landing pages. NOTE: live ads may point here; see docs/deploy-and-rebuild.md before launch.
-  r("/1000-off", "/contact/"),
-  r("/1000-off-copy", "/contact/"),
-  r("/20pct-off", "/contact/"),
-  r("/20-off-patios-walkways", "/contact/"),
-  r("/optin", "/contact/"),
-  r("/patios-walkways", "/services/paver-patios-walkways/"),
-  // Old in-post links and posts that were never published
-  r("/blog/west-hartford", "/service-areas/west-hartford/"),
-  r("/blog/what-to-ask-before-hiring-a-patio-contractor-in-connecticut", "/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance/"),
-  r("/blog/safe-de-icing-for-paver-patios-stone-steps-and-walkways", "/blog/prepare-patio-for-winter-connecticut/"),
-  r("/blog/updated-guide-to-hardscaping-pavers", "/blog/hardscaping-pavers-planning-your-outdoor-space/"),
-  r("/patio-installation-cost-connecticut-cost-guide", "/blog/patio-installation-cost-connecticut-cost-guide/"),
-  r("/outdoor-kitchen-cost-connecticut", "/blog/outdoor-kitchen-cost-connecticut/"),
-  r("/hardscaping-pavers-planning-your-outdoor-space", "/blog/hardscaping-pavers-planning-your-outdoor-space/"),
-  // CMS moved from /cms to /studio
-  r("/cms", "/studio/"),
-  r("/cms/:path*", "/studio/:path*"),
+/**
+ * Addresses that answered 404 on October 26, 2026, each sent to the closest
+ * live page: links in three blog posts to posts that were never published,
+ * and common shortcuts people and crawlers try.
+ */
+const moved: Row[] = [
+  { source: "/uncategorized/updated-guide-to-hardscaping-pavers/", destination: "/blog/hardscaping-pavers-planning-your-outdoor-space/" },
+  { source: "/uncategorized/what-to-ask-before-hiring-a-patio-contractor-in-connecticut/", destination: "/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance/" },
+  { source: "/uncategorized/safe-de-icing-for-paver-patios-stone-steps-and-walkways/", destination: "/blog/prepare-patio-for-winter-connecticut/" },
+  // Linked from blog posts; WordPress' slug guess (lib/site/guess.ts) sent these on, now a plain rule.
+  { source: "/patio-installation-cost-connecticut-cost-guide/", destination: "/blog/patio-installation-cost-connecticut-cost-guide/" },
+  { source: "/outdoor-kitchen-cost-connecticut/", destination: "/blog/outdoor-kitchen-cost-connecticut/" },
+  // Linked from the fire pit vs fireplace post (Nov 20 sweep, TTR-2513).
+  { source: "/hardscaping-pavers-planning-your-outdoor-space/", destination: "/blog/hardscaping-pavers-planning-your-outdoor-space/" },
+  { source: "/sitemap.xml", destination: "/sitemap_index.xml" },
+  { source: "/contact-us/", destination: "/contact/" },
+  { source: "/faq/", destination: "/frequently-asked-questions/" },
+  { source: "/testimonials/", destination: "/reviews/" },
+  { source: "/comments/feed/", destination: "/feed/" },
+  { source: "/blog/feed/", destination: "/feed/" },
+  // The old CMS address
+  { source: "/cms/", destination: "/studio/" },
+  { source: "/cms/:path*", destination: "/studio/" },
 ];
+
+export const redirectRows: Row[] = [...moved, ...(wordpress as Row[])];
+
+export const redirects = redirectRows.map((r) => ({
+  source: r.source,
+  destination: r.destination,
+  statusCode: 301 as const,
+  // WordPress shortlinks: /?p=123 and /?page_id=123
+  ...(r.query ? { has: Object.entries(r.query).map(([key, value]) => ({ type: "query" as const, key, value })) } : {}),
+}));

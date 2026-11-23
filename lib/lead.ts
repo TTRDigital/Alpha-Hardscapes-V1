@@ -1,18 +1,24 @@
 import "server-only";
 
 /**
- * Delivers a website estimate request. Destinations are configured with environment
- * variables (see .env.example): GHL_WEBHOOK_URL (GoHighLevel inbound webhook) and/or
- * RESEND_API_KEY + LEAD_EMAIL_TO. With neither set, the lead is logged to the server
- * console so a preview deployment still "works".
+ * Delivers a website form submission. Every destination is optional and
+ * configured with environment variables (see .env.example):
+ * - GHL_WEBHOOK_URL: GoHighLevel inbound webhook (flat JSON)
+ * - RESEND_API_KEY + LEAD_EMAIL_TO (+ LEAD_EMAIL_FROM): email notification
  */
-export type Lead = { name: string; phone: string; email: string; town: string; service: string; message: string; source: string; page: string };
 
-function phoneE164(raw: string) {
-  const d = raw.replace(/\D/g, "");
-  if (d.length === 10) return `+1${d}`;
-  if (d.length === 11 && d.startsWith("1")) return `+${d}`;
-  return raw.trim();
+/** GoHighLevel inbound webhook the live site's forms send to (GHL_WEBHOOK_URL overrides it). Same destination and payload as before. */
+const GHL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/lrPBYGPJ5Pp68Mqe7rNd/webhook-trigger/696ad4ed-5819-4ace-9aa5-82d3e08217e2";
+
+export type Lead = {
+  form: string;
+  fields: Record<string, string>;
+  page: string;
+  tag?: string;
+};
+
+function clean(v: string | undefined) {
+  return v?.trim().replace(/^["']|["']$/g, "").trim() || "";
 }
 
 async function post(url: string, init: RequestInit) {
@@ -21,7 +27,7 @@ async function post(url: string, init: RequestInit) {
     try {
       const res = await fetch(url, { ...init, signal: AbortSignal.timeout(8000), cache: "no-store" });
       if (res.ok) return;
-      last = new Error(`${new URL(url).host} answered ${res.status}`);
+      last = new Error(`${url} answered ${res.status}: ${(await res.text().catch(() => "")).slice(0, 300)}`);
       if (res.status !== 429 && res.status < 500) break;
     } catch (err) {
       last = err;
@@ -31,65 +37,102 @@ async function post(url: string, init: RequestInit) {
   throw last;
 }
 
+function phoneE164(raw = "") {
+  const d = raw.replace(/\D/g, "");
+  if (d.length === 10) return `+1${d}`;
+  if (d.length === 11 && d.startsWith("1")) return `+${d}`;
+  return raw.trim();
+}
+
+/** First field whose label matches. */
+function pick(fields: Record<string, string>, re: RegExp) {
+  const key = Object.keys(fields).find((k) => re.test(k));
+  return key ? fields[key] : "";
+}
+
 export async function deliverLead(lead: Lead) {
-  const [first, ...rest] = lead.name.split(/\s+/);
+  const f = lead.fields;
+  const name = pick(f, /^(full )?name$/i) || f.name || "";
+  const phone = pick(f, /phone/i);
+  const email = pick(f, /e-?mail/i);
+  const address = pick(f, /address/i);
+  const zip = pick(f, /zip|postal/i);
+  const service = pick(f, /service/i);
+  const [first, ...rest] = name.trim().split(/\s+/);
   const tasks: Promise<void>[] = [];
-  const webhook = process.env.GHL_WEBHOOK_URL?.trim();
-  if (webhook && /^https:\/\//.test(webhook)) {
+
+  const webhook = clean(process.env.GHL_WEBHOOK_URL) || GHL_WEBHOOK;
+  if (/^https?:\/\//.test(webhook)) {
     tasks.push(
       post(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: lead.source,
-          form: "Website estimate form",
-          tags: ["website-lead"],
+          source: "Website form",
+          form: lead.form,
+          tags: ["website-lead", ...(lead.tag ? [lead.tag] : [])],
           submitted_at: new Date().toISOString(),
-          name: lead.name,
+          name,
           first_name: first || "",
           last_name: rest.join(" "),
-          email: lead.email,
-          phone: phoneE164(lead.phone),
-          phone_raw: lead.phone,
-          city: lead.town,
-          service: lead.service,
-          message: lead.message,
-          page: lead.page,
+          email,
+          phone: phoneE164(phone),
+          phone_raw: phone,
+          address,
+          postal_code: zip,
+          service_needed: service,
+          page_url: lead.page,
+          fields: f,
         }),
       }),
     );
   }
-  const resendKey = process.env.RESEND_API_KEY?.trim();
-  const to = process.env.LEAD_EMAIL_TO?.trim();
+
+  const resendKey = clean(process.env.RESEND_API_KEY);
+  const to = clean(process.env.LEAD_EMAIL_TO);
   if (resendKey && to) {
-    const from = process.env.LEAD_EMAIL_FROM?.trim() || "Alpha Hardscapes Website <onboarding@resend.dev>";
-    const rows = Object.entries({ Name: lead.name, Phone: lead.phone, Email: lead.email, Town: lead.town, Service: lead.service, Message: lead.message, Page: lead.page, Source: lead.source })
-      .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#555">${k}</td><td style="padding:4px 0"><b>${escapeHtml(v)}</b></td></tr>`)
+    const rows = Object.entries(f)
+      .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0"><b>${esc(k)}</b></td><td>${esc(v)}</td></tr>`)
       .join("");
     tasks.push(
       post("https://api.resend.com/emails", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendKey}` },
+        headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from,
-          to: to.split(",").map((s) => s.trim()),
-          reply_to: lead.email,
-          subject: `New estimate request: ${lead.service || "project"} in ${lead.town || "CT"} (${lead.name})`,
-          html: `<h2 style="font-family:sans-serif">New website lead</h2><table style="font-family:sans-serif;font-size:15px">${rows}</table>`,
+          from: clean(process.env.LEAD_EMAIL_FROM) || "Alpha Hardscapes Website <onboarding@resend.dev>",
+          to: to.split(/[,;]\s*/),
+          reply_to: email || undefined,
+          subject: `New ${lead.form || "website"} submission${name ? ` from ${name}` : ""}`,
+          html: `<p>New submission on <a href="${esc(lead.page)}">${esc(lead.page)}</a></p><table>${rows}</table>`,
         }),
       }),
     );
   }
+
   if (!tasks.length) {
-    console.info("[lead] no destination configured; lead:", { ...lead, message: lead.message.slice(0, 80) });
-    return;
+    console.warn("[lead] No delivery configured (GHL_WEBHOOK_URL or RESEND_API_KEY + LEAD_EMAIL_TO). Lead:", JSON.stringify(lead));
+    return false;
   }
   const results = await Promise.allSettled(tasks);
   const failed = results.filter((r) => r.status === "rejected");
-  if (failed.length === results.length) throw (failed[0] as PromiseRejectedResult).reason;
-  for (const f of failed) console.error("[lead] one destination failed", (f as PromiseRejectedResult).reason);
+  for (const r of failed) console.error("[lead] delivery failed", (r as PromiseRejectedResult).reason);
+  return failed.length < results.length;
 }
 
-function escapeHtml(s: string) {
-  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
+function esc(s: string) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+export async function verifyRecaptcha(token: string | null, ip?: string | null) {
+  const secret = clean(process.env.RECAPTCHA_SECRET_KEY);
+  if (!secret) return true; // not configured: accept (Elementor still shows the checkbox)
+  if (!token) return false;
+  const body = new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) });
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", { method: "POST", body, signal: AbortSignal.timeout(6000) });
+    const json = (await res.json()) as { success?: boolean };
+    return Boolean(json.success);
+  } catch {
+    return true; // Google unreachable: do not lose the lead
+  }
 }
