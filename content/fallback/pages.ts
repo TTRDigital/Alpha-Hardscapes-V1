@@ -4,10 +4,10 @@ import { pt } from "./pt.ts";
 import legal from "./legal.data.ts";
 
 export const homePage: HomePage = {
-  eyebrow: "Hardscaping · Masonry · Outdoor Living · Cheshire, CT",
-  heading: "Patios, walkways and walls built to last a Connecticut lifetime.",
+  eyebrow: "Hardscaping & masonry · Cheshire, Connecticut",
+  heading: "Patios, walkways and walls built to last.",
   subheading:
-    "Alpha Hardscapes designs and builds paver patios, natural stone walkways, retaining walls, steps, outdoor kitchens and fire features for homeowners across New Haven, Hartford and Fairfield Counties. One crew, one point of contact, a free on-site estimate.",
+    "Hardscaping, masonry and outdoor living for homes across New Haven, Hartford and Fairfield Counties. One crew, one point of contact, a free on-site estimate.",
   heroImage: img("/images/brand/hero-poster.webp", "Lit pool, paver patio and fire pit behind a Connecticut home at dusk"),
   heroVideoUrl: "/images/brand/hero.mp4",
   reelVideoUrl: "/images/brand/reel-vertical.mp4",
@@ -19,12 +19,12 @@ export const homePage: HomePage = {
     { value: "3", label: "counties served" },
   ],
   servicesHeading: "What we build",
-  servicesText: "Hardscaping, masonry and outdoor living, designed together and built by the same crew.",
+  servicesText: "Designed together and built by the same crew, from the first stone to the final walk-through.",
   projectsHeading: "Recent projects",
-  projectsText: "Real work from real Connecticut yards. Every project is photographed on site by our crew.",
+  projectsText: "Real work from Connecticut yards, photographed on site.",
   aboutHeading: "A small, hands-on crew led by its founder",
   aboutText:
-    "Sebastian Ullrich started Alpha Hardscapes after years in the field, and he is still on site for every project. That means the person who gives you the estimate is the person who builds the job, answers the phone and does the final walk-through with you.",
+    "We are a small, hands-on crew from Cheshire. The person who walks your property and writes the estimate is the person who builds it, so every base, edge and joint is done the way we would want it at our own homes.",
   aboutImage: img("/images/people/sebastian-cutout.webp", "Sebastian Ullrich, founder of Alpha Hardscapes"),
   whyHeading: "Why Connecticut homeowners choose Alpha Hardscapes",
   whyItems: [

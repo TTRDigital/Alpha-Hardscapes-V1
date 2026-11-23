@@ -3,14 +3,14 @@ import type { FaqItem } from "@/lib/types";
 export function FaqList({ items, className = "" }: { items: FaqItem[]; className?: string }) {
   if (!items?.length) return null;
   return (
-    <div className={`divide-y divide-ink/10 ${className}`}>
+    <div className={`border-t border-line ${className}`}>
       {items.map((f, i) => (
-        <details key={i} className="faq group py-1">
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-4 text-left text-[17px] font-bold text-ink">
+        <details key={i} className="faq group border-b border-line">
+          <summary className="flex cursor-pointer list-none items-start justify-between gap-8 py-6 text-left text-[17px] font-medium tracking-[-0.01em] text-ink">
             <span>{f.question}</span>
-            <span className="faq-icon mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stone-200 text-lg leading-none text-ink transition-transform" aria-hidden="true">+</span>
+            <span className="faq-icon mt-0.5 text-[22px] font-light leading-none text-muted transition-transform duration-200" aria-hidden="true">+</span>
           </summary>
-          <p className="pb-5 pr-10 text-[16px] leading-relaxed text-stone-700">{f.answer}</p>
+          <p className="max-w-3xl pb-7 pr-10 text-[16px] leading-relaxed text-muted">{f.answer}</p>
         </details>
       ))}
     </div>

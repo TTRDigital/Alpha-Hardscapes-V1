@@ -22,15 +22,15 @@ export function Gallery({ images, columns = 3 }: { images: ImgT[]; columns?: 2 |
   const cols = { 2: "sm:grid-cols-2", 3: "sm:grid-cols-2 lg:grid-cols-3", 4: "sm:grid-cols-2 lg:grid-cols-4" }[columns];
   return (
     <>
-      <div className={`grid grid-cols-1 gap-3 ${cols}`}>
+      <div className={`grid grid-cols-1 gap-4 ${cols}`}>
         {images.map((im, i) => (
-          <button key={i} type="button" onClick={() => setOpen(i)} className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-stone-200 text-left" aria-label={`Open photo: ${im.alt}`}>
-            <Img image={im} fill sizes="(min-width: 1024px) 600px, (min-width: 640px) 70vw, 130vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+          <button key={i} type="button" onClick={() => setOpen(i)} className="group relative aspect-[4/3] overflow-hidden rounded-lg bg-mist text-left" aria-label={`Open photo: ${im.alt}`}>
+            <Img image={im} fill sizes="(min-width: 1024px) 600px, (min-width: 640px) 70vw, 130vw" className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
           </button>
         ))}
       </div>
       {open !== null && images[open] && (
-        <div role="dialog" aria-modal="true" aria-label="Photo viewer" className="fixed inset-0 z-50 flex items-center justify-center bg-ink/95 p-4" onClick={close}>
+        <div role="dialog" aria-modal="true" aria-label="Photo viewer" className="fixed inset-0 z-50 flex items-center justify-center bg-ink/97 p-4" onClick={close}>
           <button type="button" onClick={close} aria-label="Close" className="absolute right-4 top-4 rounded-full bg-white/10 p-3 text-stone-50 hover:bg-white/20"><Icon name="close" className="h-5 w-5" /></button>
           <button type="button" onClick={(e) => { e.stopPropagation(); step(-1); }} aria-label="Previous photo" className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-stone-50 hover:bg-white/20"><Icon name="arrow" className="h-5 w-5 rotate-180" /></button>
           <button type="button" onClick={(e) => { e.stopPropagation(); step(1); }} aria-label="Next photo" className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-stone-50 hover:bg-white/20"><Icon name="arrow" className="h-5 w-5" /></button>

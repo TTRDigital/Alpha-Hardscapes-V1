@@ -19,11 +19,9 @@ export default async function ProjectsPage() {
   const crumbs = [{ label: "Projects", href: "/projects/" }];
   return (
     <>
-      <PageHero eyebrow="Projects" title="Real yards, real work" text="Patios, walkways, walls, steps and outdoor living spaces photographed on site by our crew. Filter by the type of work you are planning." crumbs={crumbs} compact />
-      <section className="container-x py-12 sm:py-16">
-        <ProjectGrid projects={projects} />
-      </section>
-      <CtaBand settings={settings} title="Want your yard in this gallery?" />
+      <PageHero eyebrow="Projects" title="Real yards, real work." text="Patios, walkways, walls, steps and outdoor living spaces, photographed on site by our crew." crumbs={crumbs} />
+      <section className="container-x pb-24 pt-4 sm:pb-32"><ProjectGrid projects={projects} /></section>
+      <CtaBand settings={settings} title="Want your yard here next?" />
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
     </>
   );

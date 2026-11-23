@@ -35,10 +35,8 @@ export const settings: SiteSettings = {
   headerLinks: [
     { label: "Services", href: "/services/" },
     { label: "Projects", href: "/projects/" },
-    { label: "Service Areas", href: "/service-areas/" },
     { label: "About", href: "/about/" },
     { label: "Reviews", href: "/reviews/" },
-    { label: "Blog", href: "/blog/" },
     { label: "Contact", href: "/contact/" },
   ],
   footerLinks: [

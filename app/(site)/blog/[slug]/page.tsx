@@ -2,16 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Img } from "@/components/ui/Img";
-import { Icon } from "@/components/ui/Icon";
 import { Breadcrumbs, breadcrumbJsonLd } from "@/components/blocks/Breadcrumbs";
 import { RichText, headingsOf } from "@/components/blocks/RichText";
 import { FaqList, faqJsonLd } from "@/components/blocks/Faq";
-import { ServiceCard } from "@/components/blocks/Cards";
 import { CtaBand } from "@/components/blocks/CtaBand";
 import { JsonLd } from "@/components/blocks/JsonLd";
 import { allSlugs, getPost, getPosts, getSettings } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
-import { absUrl, formatDate, plainText, readingTime, SITE_URL, telHref } from "@/lib/site";
+import { absUrl, formatDate, plainText, readingTime, SITE_URL } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -39,66 +37,59 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <article>
-        <header className="container-x pt-8 sm:pt-12">
+        <header className="container-x pt-10 sm:pt-14">
           <Breadcrumbs items={crumbs} />
-          <div className="mx-auto mt-8 max-w-3xl text-center">
-            <p className="eyebrow justify-center">{formatDate(post.publishedAt)} · {minutes} min read</p>
-            <h1 className="display-lg mt-4">{post.title}</h1>
-            {post.excerpt && <p className="mt-5 text-lg leading-relaxed text-stone-700">{post.excerpt}</p>}
-            <p className="mt-4 text-sm text-stone-500">By {post.author || settings.businessName}</p>
+          <div className="mx-auto mt-14 max-w-3xl">
+            <p className="label">{formatDate(post.publishedAt)} · {minutes} min read</p>
+            <h1 className="h-xl mt-5">{post.title}</h1>
+            {post.excerpt && <p className="mt-6 text-[1.15rem] leading-relaxed text-muted">{post.excerpt}</p>}
           </div>
           {post.featuredImage && (
-            <div className="relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl bg-stone-200" style={{ aspectRatio: `${post.featuredImage.width ?? 16} / ${post.featuredImage.height ?? 9}` }}>
+            <div className="relative mx-auto mt-14 max-w-5xl overflow-hidden rounded-lg bg-mist" style={{ aspectRatio: `${post.featuredImage.width ?? 16} / ${post.featuredImage.height ?? 9}` }}>
               <Img image={post.featuredImage} fill priority sizes="(min-width: 1024px) 1024px, 100vw" quality={90} className="object-cover" />
             </div>
           )}
         </header>
-        <div className="container-x grid gap-12 py-12 lg:grid-cols-12 sm:py-16">
-          <aside className="order-2 lg:order-1 lg:col-span-3">
-            <div className="sticky top-24 space-y-6">
-              {toc.length > 1 && (
-                <nav aria-label="In this article" className="hidden lg:block">
-                  <p className="eyebrow">In this article</p>
-                  <ol className="mt-3 space-y-2 border-l border-ink/10 text-[14px]">
-                    {toc.map((h) => (<li key={h.id}><a href={`#${h.id}`} className="-ml-px block border-l-2 border-transparent pl-4 text-stone-700 hover:border-lime hover:text-ink">{h.text}</a></li>))}
-                  </ol>
-                </nav>
-              )}
-              <div className="card p-5">
-                <p className="font-bold">Planning this project?</p>
-                <p className="mt-1 text-[14px] text-stone-700">We give free on-site estimates across New Haven, Hartford and Fairfield Counties.</p>
-                <Link href="/contact/" className="btn-primary mt-4 w-full !py-3">Get a free estimate</Link>
-                <a href={telHref(settings.phoneE164)} className="mt-3 flex items-center justify-center gap-2 text-[14px] font-bold hover:text-moss"><Icon name="phone" className="h-4 w-4 text-moss" />{settings.phone}</a>
-              </div>
-            </div>
-          </aside>
-          <div className="order-1 lg:order-2 lg:col-span-8">
+        <div className="container-x py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl">
+            {toc.length > 2 && (
+              <nav aria-label="In this article" className="mb-14 border-y border-line py-6">
+                <p className="text-[13px] text-subtle">In this article</p>
+                <ol className="mt-3 grid gap-x-8 gap-y-1.5 text-[15px] sm:grid-cols-2">
+                  {toc.map((h) => (<li key={h.id}><a href={`#${h.id}`} className="text-muted hover:text-ink">{h.text}</a></li>))}
+                </ol>
+              </nav>
+            )}
             <RichText value={post.body} />
             {post.faqs && post.faqs.length > 0 && (
-              <div className="mt-12">
-                <h2 className="display-md">Frequently asked questions</h2>
-                <FaqList items={post.faqs} className="mt-4" />
+              <div className="mt-16">
+                <h2 className="h-md">Frequently asked questions</h2>
+                <FaqList items={post.faqs} className="mt-6" />
                 <JsonLd data={faqJsonLd(post.faqs)} />
               </div>
             )}
+            <div className="mt-16 flex flex-col gap-6 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-[16px]">Planning this project? <span className="text-muted">Free on-site estimates across Southern Connecticut.</span></p>
+              <Link href="/contact/" className="btn-primary shrink-0">Get a free estimate</Link>
+            </div>
             {post.relatedService && (
-              <div className="mt-12">
-                <p className="eyebrow">Related service</p>
-                <div className="mt-4 max-w-md"><ServiceCard service={post.relatedService} /></div>
-              </div>
+              <Link href={`/services/${post.relatedService.slug}/`} className="mt-10 flex items-center justify-between border-y border-line py-5 hover:text-muted">
+                <span><span className="block text-[13px] text-subtle">Related service</span><span className="h-sm">{post.relatedService.title}</span></span>
+                <span aria-hidden="true">→</span>
+              </Link>
             )}
           </div>
         </div>
       </article>
       {more.length > 0 && (
-        <section className="bg-white py-16">
+        <section className="border-t border-line bg-white py-20">
           <div className="container-x">
-            <h2 className="display-md">More guides</h2>
-            <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <p className="label">More guides</p>
+            <div className="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {more.map((p) => (
-                <Link key={p.slug} href={`/blog/${p.slug}/`} className="group">
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-stone-200">{p.featuredImage && <Img image={p.featuredImage} fill quality={90} sizes="(min-width: 1024px) 760px, (min-width: 640px) 95vw, 190vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />}</div>
-                  <h3 className="display-sm mt-4 group-hover:text-moss">{p.title}</h3>
+                <Link key={p.slug} href={`/blog/${p.slug}/`} className="group block">
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-mist">{p.featuredImage && <Img image={p.featuredImage} fill quality={90} sizes="(min-width: 1024px) 760px, (min-width: 640px) 95vw, 190vw" className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />}</div>
+                  <h3 className="h-sm mt-5 group-hover:text-muted">{p.title}</h3>
                 </Link>
               ))}
             </div>

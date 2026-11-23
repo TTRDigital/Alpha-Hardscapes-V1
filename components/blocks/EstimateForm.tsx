@@ -36,13 +36,14 @@ export function EstimateForm({ services, thankYouPath = "/thank-you/", compact, 
     }
   }
 
-  const input = `w-full rounded-xl border px-4 py-3 text-[15px] outline-none transition focus:ring-2 focus:ring-lime ${dark ? "border-white/15 bg-white/10 text-stone-50 placeholder:text-stone-400 focus:border-lime" : "border-ink/15 bg-white text-ink placeholder:text-stone-400 focus:border-lime-600"}`;
-  const label = `mb-1.5 block text-[13px] font-bold ${dark ? "text-stone-200" : "text-ink-700"}`;
+  // Underlined fields: calm, modern, still clearly tappable (48px tall).
+  const input = `h-12 w-full border-0 border-b bg-transparent px-0 text-[16px] outline-none transition-colors placeholder:text-subtle focus:ring-0 ${dark ? "border-white/25 text-white focus:border-white" : "border-line text-ink focus:border-ink"}`;
+  const label = `block text-[13px] ${dark ? "text-white/60" : "text-muted"}`;
 
   return (
     <form onSubmit={onSubmit} className={className} noValidate={false}>
       <div className="hidden" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-      <div className={`grid gap-4 ${compact ? "" : "sm:grid-cols-2"}`}>
+      <div className={`grid gap-x-8 gap-y-6 ${compact ? "" : "sm:grid-cols-2"}`}>
         <div>
           <label htmlFor={`${source}-name`} className={label}>Name</label>
           <input id={`${source}-name`} name="name" required autoComplete="name" placeholder="Full name" className={input} />
@@ -61,7 +62,7 @@ export function EstimateForm({ services, thankYouPath = "/thank-you/", compact, 
         </div>
         <div className={compact ? "" : "sm:col-span-2"}>
           <label htmlFor={`${source}-service`} className={label}>What are you planning?</label>
-          <select id={`${source}-service`} name="service" required defaultValue="" className={input}>
+          <select id={`${source}-service`} name="service" required defaultValue="" className={`${input} appearance-none bg-[length:12px] bg-[right_center] bg-no-repeat`} style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b66' fill='none' stroke-width='1.5'/%3E%3C/svg%3E\")" }}>
             <option value="" disabled>Choose a project type</option>
             {services.map((s) => (<option key={s.slug} value={s.title}>{s.title}</option>))}
             <option value="Other">Something else</option>
@@ -70,15 +71,15 @@ export function EstimateForm({ services, thankYouPath = "/thank-you/", compact, 
         {!compact && (
           <div className="sm:col-span-2">
             <label htmlFor={`${source}-message`} className={label}>Tell us about the project (optional)</label>
-            <textarea id={`${source}-message`} name="message" rows={4} placeholder="Size, materials you like, timing, anything we should know" className={input} />
+            <textarea id={`${source}-message`} name="message" rows={3} placeholder="Size, materials you like, timing" className={`${input} h-auto py-3`} />
           </div>
         )}
       </div>
-      <button type="submit" disabled={status === "sending"} className="btn-primary mt-5 w-full disabled:opacity-60">
+      <button type="submit" disabled={status === "sending"} className={`mt-10 w-full disabled:opacity-60 sm:w-auto ${dark ? "btn-lime" : "btn-primary"}`}>
         {status === "sending" ? "Sending…" : "Request my free estimate"} <Icon name="arrow" className="h-4 w-4" />
       </button>
       {status === "error" && <p role="alert" className="mt-3 text-sm font-semibold text-red-600">{error}</p>}
-      <p className={`mt-3 text-[12px] leading-relaxed ${dark ? "text-stone-400" : "text-stone-500"}`}>
+      <p className={`mt-4 max-w-md text-[12px] leading-relaxed ${dark ? "text-white/40" : "text-subtle"}`}>
         By submitting, you agree to be contacted by phone, email or text about your project. No spam, and you can opt out at any time.
       </p>
     </form>

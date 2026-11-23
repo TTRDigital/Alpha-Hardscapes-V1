@@ -1,21 +1,18 @@
 import Link from "next/link";
-import { Icon } from "@/components/ui/Icon";
 import { telHref } from "@/lib/site";
 import type { SiteSettings } from "@/lib/types";
 
+/** Closing call to action: one large line, one button, the phone number. */
 export function CtaBand({ settings, title, text }: { settings: SiteSettings; title?: string; text?: string }) {
   return (
-    <section className="relative overflow-hidden bg-ink py-16 text-stone-50 sm:py-20">
-      <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/20 blur-3xl" aria-hidden="true" />
-      <div className="container-x grid items-center gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <p className="eyebrow-light">Free on-site estimate</p>
-          <h2 className="display-lg mt-3">{title || settings.ctaBandTitle || "Ready to transform your outdoor space?"}</h2>
-          <p className="mt-4 max-w-2xl text-lg text-stone-300">{text || settings.ctaBandText}</p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:flex-col">
-          <Link href="/contact/" className="btn-primary">{settings.ctaPrimary || "Get a Free Estimate"} <Icon name="arrow" className="h-4 w-4" /></Link>
-          <a href={telHref(settings.phoneE164)} className="btn-outline-light"><Icon name="phone" className="h-4 w-4" /> {settings.phone}</a>
+    <section className="bg-ink py-24 text-white sm:py-32">
+      <div className="container-x">
+        <p className="label-light">Free on-site estimate</p>
+        <h2 className="h-xl mt-6 max-w-4xl">{title || settings.ctaBandTitle || "Ready to transform your outdoor space?"}</h2>
+        {(text || settings.ctaBandText) && <p className="mt-6 max-w-xl text-[1.1rem] leading-relaxed text-white/60">{text || settings.ctaBandText}</p>}
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+          <Link href="/contact/" className="btn-lime">{settings.ctaPrimary || "Get a free estimate"}</Link>
+          <a href={telHref(settings.phoneE164)} className="text-[17px] font-medium tabular-nums text-white/80 hover:text-white">or call {settings.phone}</a>
         </div>
       </div>
     </section>

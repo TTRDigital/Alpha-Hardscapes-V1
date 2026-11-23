@@ -1,20 +1,24 @@
 import type { ReactNode } from "react";
 
 export function Section({ children, className = "", id, tone = "light" }: { children: ReactNode; className?: string; id?: string; tone?: "light" | "muted" | "dark" | "white" }) {
-  const tones = { light: "bg-stone-50", muted: "bg-stone-100", dark: "bg-ink text-stone-50", white: "bg-white" };
+  const tones = { light: "bg-paper", muted: "bg-mist", dark: "bg-ink text-white", white: "bg-white" };
   return (
-    <section id={id} className={`${tones[tone]} py-16 sm:py-24 ${className}`}>
+    <section id={id} className={`${tones[tone]} py-20 sm:py-28 lg:py-32 ${className}`}>
       <div className="container-x">{children}</div>
     </section>
   );
 }
 
-export function SectionHeading({ eyebrow, title, text, light, align = "left", as: As = "h2" }: { eyebrow?: string; title: string; text?: string; light?: boolean; align?: "left" | "center"; as?: "h1" | "h2" }) {
+/** Section heading: small numbered mono label + large heading + optional text, all left aligned. */
+export function SectionHeading({ eyebrow, title, text, light, index, as: As = "h2", action }: { eyebrow?: string; title: string; text?: string; light?: boolean; index?: string; as?: "h1" | "h2"; action?: ReactNode; align?: "left" | "center" }) {
   return (
-    <div className={`max-w-2xl ${align === "center" ? "mx-auto text-center" : ""}`}>
-      {eyebrow && <p className={light ? "eyebrow-light" : "eyebrow"}>{eyebrow}</p>}
-      <As className={`display-lg mt-3 ${light ? "text-stone-50" : "text-ink"}`}>{title}</As>
-      {text && <p className={`mt-4 text-lg leading-relaxed ${light ? "text-stone-300" : "text-stone-700"}`}>{text}</p>}
+    <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div className="max-w-3xl">
+        {eyebrow && <p className={light ? "label-light" : "label"}>{index ? `(${index}) ` : ""}{eyebrow}</p>}
+        <As className={`h-lg mt-4 ${light ? "text-white" : "text-ink"}`}>{title}</As>
+        {text && <p className={`mt-5 max-w-2xl text-[1.1rem] leading-relaxed ${light ? "text-white/60" : "text-muted"}`}>{text}</p>}
+      </div>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }
