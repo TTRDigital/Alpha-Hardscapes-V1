@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (f.required && !raw) return reply(false, `Please fill in ${f.label || f.placeholder || "all required fields"}.`, 422);
     if (!raw) continue;
     const label = f.label || f.id;
-    fields[label] = f.type === "acceptance" ? (f.text || "Yes") : raw;
+    fields[label] = f.type === "acceptance" ? "on" : raw; // as the live Elementor form sent it
   }
   const reachable = Object.entries(fields).some(([k, v]) => /phone|e-?mail/i.test(k) && v);
   if (!reachable) return reply(false, "Please add a phone number or email so we can reach you.", 422);
