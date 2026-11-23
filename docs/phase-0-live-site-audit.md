@@ -3,7 +3,7 @@
 **Site audited:** https://alphahardscapes.com (23 November 2026)
 **Source of truth:** the live site is a Next.js 16 pixel-copy of the former WordPress/Elementor site (repository `TTRDigital/Alpha-Hardscapes`) with all 109 content documents in Sanity project `7ysj6im9`. Its built-in copy (`content/seed.json`, 10 MB of Elementor node trees) and `public/` folder (556 MB) were used as the inventory source, cross-checked against the live sitemap.
 
-## 1. Business facts (now in `content/fallback/settings.ts`)
+## 1. Business facts (now in `content/site.ts`)
 
 | Fact | Value |
 |---|---|
@@ -23,7 +23,7 @@
 
 | Old page(s) | Content | New home |
 |---|---|---|
-| `/` | Hero + video reel, intro, hardscaping and landscaping service lists, 5-step process, 7 "why us" points, 8-photo projects slider, 10 Google reviews, service-area map, 5 FAQs, CTA | Home page (`content/fallback/pages.ts`) |
+| `/` | Hero + video reel, intro, hardscaping and landscaping service lists, 5-step process, 7 "why us" points, 8-photo projects slider, 10 Google reviews, service-area map, 5 FAQs, CTA | Home page (`content/legacy/site.data.ts`) |
 | `/about-us/` | Founder blurb, "Alpha advantage" 4 values, masonry and landscaping service lists | About page |
 | `/masonry/` (hub) | Stone/concrete/block/brick masonry, 8 paver project types, 6 benefits, 5-step "how we work", 6 before/after collages | Services index + sections of Retaining Walls, Stone Steps, Chimneys, Stone Veneer, Repairs |
 | `/walkway-patio-connecticut/` | Patios and walkways copy, materials list, 5 FAQs, 8 photos | Service: Paver Patios & Walkways |
