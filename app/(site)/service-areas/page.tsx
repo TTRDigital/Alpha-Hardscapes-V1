@@ -50,8 +50,8 @@ export default async function AreasPage() {
             </div>
           </div>
         )}
-        <div className="mt-16 overflow-hidden rounded-3xl bg-stone-200">
-          <Img image={{ src: "/images/areas/southern-connecticut-map.webp", alt: "Map of the Alpha Hardscapes service area across Southern Connecticut", width: 1400, height: 1000 }} className="w-full" sizes="(min-width: 1280px) 1240px, 100vw" />
+        <div className="mx-auto mt-16 max-w-[560px] overflow-hidden rounded-3xl bg-stone-200">
+          <Img image={{ src: "/images/areas/southern-connecticut-map.webp", alt: "Map of the Alpha Hardscapes service area across Southern Connecticut", width: 702, height: 626 }} className="w-full" sizes="560px" quality={90} />
         </div>
       </section>
       <CtaBand settings={settings} />

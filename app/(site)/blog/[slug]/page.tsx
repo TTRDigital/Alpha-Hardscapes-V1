@@ -97,7 +97,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {more.map((p) => (
                 <Link key={p.slug} href={`/blog/${p.slug}/`} className="group">
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-stone-200">{p.featuredImage && <Img image={p.featuredImage} fill sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />}</div>
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-stone-200">{p.featuredImage && <Img image={p.featuredImage} fill quality={90} sizes="(min-width: 1024px) 760px, (min-width: 640px) 95vw, 190vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />}</div>
                   <h3 className="display-sm mt-4 group-hover:text-moss">{p.title}</h3>
                 </Link>
               ))}

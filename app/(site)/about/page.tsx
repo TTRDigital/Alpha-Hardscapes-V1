@@ -28,8 +28,8 @@ export default async function AboutPage() {
       <section className="container-x grid items-start gap-12 py-16 lg:grid-cols-12 sm:py-24">
         <div className="lg:col-span-5">
           {about.founderImage && (
-            <div className="relative mx-auto aspect-square max-w-[440px] overflow-hidden rounded-3xl bg-ink">
-              <Img image={about.founderImage} fill sizes="(min-width: 1024px) 440px, 90vw" quality={90} className="object-cover object-top" />
+            <div className="relative mx-auto aspect-square max-w-[380px] overflow-hidden rounded-3xl bg-ink">
+              <Img image={about.founderImage} fill sizes="380px" quality={90} className="object-cover object-top" />
             </div>
           )}
         </div>

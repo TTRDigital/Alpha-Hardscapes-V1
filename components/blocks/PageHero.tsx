@@ -44,7 +44,7 @@ export function PageHero({ eyebrow, title, text, image, crumbs, children, compac
   }
   return (
     <section className="relative isolate overflow-hidden bg-ink text-stone-50">
-      <Img image={image} fill priority sizes="100vw" quality={85} className="-z-20 object-cover" />
+      <Img image={image} fill priority sizes="(max-width: 767px) 200vw, 100vw" quality={85} className="-z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/55 to-ink/25" aria-hidden="true" />
       <div className={`container-x flex flex-col justify-end ${compact ? "min-h-[320px] py-10 sm:min-h-[380px]" : "min-h-[420px] py-12 sm:min-h-[520px] sm:py-16"}`}>
         <Breadcrumbs items={crumbs} light />

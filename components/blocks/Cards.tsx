@@ -25,7 +25,7 @@ export function ProjectCard({ project, priority, tall }: { project: ProjectSumma
   return (
     <Link href={`/projects/${project.slug}/`} className="group relative block overflow-hidden rounded-2xl bg-stone-200">
       <div className={`relative ${tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
-        <Img image={project.coverImage} fill priority={priority} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+        <Img image={project.coverImage} fill priority={priority} sizes="(min-width: 1024px) 560px, (min-width: 640px) 70vw, 130vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
       </div>
       <div className="absolute inset-x-0 bottom-0 p-5 text-stone-50">

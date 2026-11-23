@@ -41,7 +41,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ink text-stone-50">
         {home.heroImage && (
-          <Img image={home.heroImage} fill priority sizes="100vw" className="-z-20 object-cover" />
+          <Img image={home.heroImage} fill priority sizes="(max-width: 767px) 200vw, 100vw" className="-z-20 object-cover" />
         )}
         {home.heroVideoUrl && <HeroVideo src={home.heroVideoUrl} poster={home.heroImage?.src} />}
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/60 to-ink/20" aria-hidden="true" />
@@ -135,8 +135,8 @@ export default async function HomePage() {
                 )}
               </div>
             ) : home.aboutImage ? (
-              <div className="relative mx-auto aspect-square max-w-[440px] overflow-hidden rounded-3xl bg-ink">
-                <Img image={home.aboutImage} fill sizes="440px" quality={90} className="object-cover object-top" />
+              <div className="relative mx-auto aspect-square max-w-[380px] overflow-hidden rounded-3xl bg-ink">
+                <Img image={home.aboutImage} fill sizes="380px" quality={90} className="object-cover object-top" />
               </div>
             ) : null}
           </div>
@@ -214,8 +214,8 @@ export default async function HomePage() {
             </ul>
           </div>
           <div className="lg:col-span-7">
-            <div className="relative overflow-hidden rounded-3xl bg-stone-200">
-              <Img image={{ src: "/images/areas/southern-connecticut-map.webp", alt: "Map of the Alpha Hardscapes service area across Southern Connecticut", width: 1400, height: 1000 }} className="w-full" sizes="(min-width: 1024px) 700px, 100vw" />
+            <div className="relative mx-auto max-w-[560px] overflow-hidden rounded-3xl bg-stone-200">
+              <Img image={{ src: "/images/areas/southern-connecticut-map.webp", alt: "Map of the Alpha Hardscapes service area across Southern Connecticut", width: 702, height: 626 }} className="w-full" sizes="560px" quality={90} />
             </div>
             {towns.length > 0 && (
               <p className="mt-5 text-[15px] leading-relaxed text-stone-700">

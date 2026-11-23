@@ -12,7 +12,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Hardscaping & Masonry Services in CT", description: "Patios, walkways, retaining walls, steps, outdoor kitchens, fire pits, pool patios, chimneys, repairs and landscaping across New Haven, Hartford and Fairfield Counties.", path: "/services/", settings });
+  return buildMetadata({ title: "Hardscaping & Masonry Services in CT", description: "Patios, walkways, retaining walls, steps, outdoor kitchens, fire pits, pool patios, chimneys and landscaping in New Haven, Hartford and Fairfield Counties.", path: "/services/", settings });
 }
 
 export default async function ServicesPage() {
