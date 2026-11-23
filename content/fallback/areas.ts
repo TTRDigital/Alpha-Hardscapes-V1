@@ -52,7 +52,7 @@ New Haven County is a region of lively town centres, historic neighbourhoods and
       { question: "How do you handle New Haven County's weather?", answer: "We build on compacted crushed-stone bases with drainage, use freeze-thaw-rated pavers and stone, and grade every surface to shed water, so the work resists cracking, heaving and settling." },
       { question: "When should I hire a masonry contractor?", answer: "For new patios, walls or steps, for structural repairs, or when ageing masonry starts to crumble. We evaluate the site and recommend repair or replacement." },
     ],
-    seo: { title: "Hardscaping & Masonry Contractor in New Haven County, CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls, steps and outdoor living across New Haven County, CT, from a Cheshire-based crew. Free estimates." },
+    seo: { title: "Hardscaping & Masonry, New Haven County CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls, steps and outdoor living across New Haven County, CT, from a Cheshire-based crew. Free estimates." },
   }),
   county({
     slug: "hartford-county",
@@ -83,7 +83,7 @@ Hartford County offers a mix of scenic suburbs, historic charm and upscale moder
       { question: "Why is professional installation important?", answer: "Proper base preparation, reinforcement and material selection prevent the premature cracking and settling that improper installation causes." },
       { question: "How long do masonry projects last?", answer: "Built on the right base with drainage, patios, walls and steps last decades with minimal upkeep." },
     ],
-    seo: { title: "Masonry & Hardscape Contractor in Hartford County, CT | Alpha Hardscapes", description: "Patios, walkways, retaining walls and stone work for Avon, Farmington, Glastonbury, Southington, West Hartford and across Hartford County, CT. Free estimates." },
+    seo: { title: "Masonry & Hardscaping, Hartford County CT | Alpha Hardscapes", description: "Patios, walkways, retaining walls and stone work for Avon, Farmington, Glastonbury, Southington, West Hartford and across Hartford County, CT. Free estimates." },
   }),
   county({
     slug: "fairfield-county",
@@ -149,7 +149,7 @@ Cheshire's housing ranges from 18th-century Colonials along the historic distric
       { question: "Do I need a permit for a patio in Cheshire?", answer: "A ground-level patio usually does not need a permit, but retaining walls over a certain height, pools, pool fences and some fire features do. We confirm with the Cheshire Building Department and handle the application." },
       { question: "How quickly can you visit a Cheshire property?", answer: "Usually within a few days of your call. Because we are based in town, scheduling an estimate is quick." },
     ],
-    seo: { title: "Hardscaping & Masonry Contractor in Cheshire, CT | Alpha Hardscapes", description: "Cheshire-based paver patio, walkway, retaining wall and stone step contractor. See our local projects and get a free estimate from Alpha Hardscapes." },
+    seo: { title: "Hardscaping & Masonry in Cheshire, CT | Alpha Hardscapes", description: "Cheshire-based paver patio, walkway, retaining wall and stone step contractor. See our local projects and get a free estimate from Alpha Hardscapes." },
   }),
   town(HC[1], HC[0], {
     slug: "southington",
@@ -174,7 +174,7 @@ From Plantsville to Marion, Southington has a mix of ranches, Colonials and newe
       { question: "What services do you provide in Southington?", answer: "Paver patios and walkways, retaining walls, stone steps, outdoor kitchens, fire pits, pool patios, chimney repair and landscaping." },
       { question: "How does masonry hold up in Southington's climate?", answer: "We use reinforced materials, compacted bases and drainage so the work resists freeze-thaw cycles and moisture." },
     ],
-    seo: { title: "Hardscaping & Masonry Contractor in Southington, CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls and steps for Southington, CT homes. Free estimates from Alpha Hardscapes, based in nearby Cheshire." },
+    seo: { title: "Hardscaping & Masonry in Southington, CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls and steps for Southington, CT homes. Free estimates from Alpha Hardscapes, based in nearby Cheshire." },
   }),
   town(HC[1], HC[0], {
     slug: "avon",
@@ -183,7 +183,7 @@ From Plantsville to Marion, Southington has a mix of ranches, Colonials and newe
     heading: "Skilled masonry and hardscape contractor in Avon, CT",
     intro:
       "Alpha Hardscapes is a skilled masonry contractor serving Avon, CT with durable stone, brick and concrete construction for residential properties. Our team delivers structurally sound patios, walls, steps and outdoor features designed to withstand Connecticut's seasonal conditions while enhancing curb appeal.",
-    image: img("/images/services/skilled-masonry-contractor-avon-ct-complete-hardscape-design.webp", "Hardscape design for an Avon, CT home"),
+    image: img("/images/gallery/g-IMG_4488.webp", "Paver patio behind a Connecticut home"),
     mapQuery: "Avon, CT",
     highlights: [
       { title: "Comprehensive residential masonry", text: "Brickwork, natural stone, retaining walls, patios and structural masonry planned for stability and drainage.", icon: "wall" },
@@ -201,7 +201,7 @@ From Plantsville to Marion, Southington has a mix of ranches, Colonials and newe
       { question: "How does masonry hold up in Avon's climate?", answer: "Masonry in Avon must withstand freeze-thaw cycles and moisture. We use reinforced materials and proper installation techniques for long-term performance." },
       { question: "When should I hire a masonry contractor in Avon?", answer: "When building new hardscape features, repairing damaged brickwork or upgrading outdoor structures." },
     ],
-    seo: { title: "Masonry & Hardscape Contractor in Avon, CT | Alpha Hardscapes", description: "Skilled masonry contractor in Avon, CT delivering durable brick and stone patios, walls and steps. Free estimates from Alpha Hardscapes." },
+    seo: { title: "Masonry & Hardscaping in Avon, CT | Alpha Hardscapes", description: "Skilled masonry contractor in Avon, CT delivering durable brick and stone patios, walls and steps. Free estimates from Alpha Hardscapes." },
   }),
   town(HC[1], HC[0], {
     slug: "farmington",
@@ -225,7 +225,7 @@ Farmington's river-valley lots and historic village homes call for careful mater
     faqs: [
       { question: "What services do you offer in Farmington?", answer: "Paver patios and walkways, retaining walls, stone steps, outdoor kitchens, fire features, pool patios, chimney repair and landscaping." },
     ],
-    seo: { title: "Masonry & Hardscape Contractor in Farmington, CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls and stone steps for Farmington, CT homes. Free estimates from Alpha Hardscapes." },
+    seo: { title: "Masonry & Hardscaping in Farmington, CT | Alpha Hardscapes", description: "Paver patios, walkways, retaining walls and stone steps for Farmington, CT homes. Free estimates from Alpha Hardscapes." },
   }),
   town(HC[1], HC[0], {
     slug: "glastonbury",
@@ -249,7 +249,7 @@ We design complete backyard spaces for Glastonbury homes: paver patios with outd
     faqs: [
       { question: "Do you build outdoor kitchens in Glastonbury?", answer: "Yes. Masonry outdoor kitchens with built-in grills, counters and bars are among our most requested Glastonbury projects, usually as part of a new patio." },
     ],
-    seo: { title: "Hardscaping & Masonry Contractor in Glastonbury, CT | Alpha Hardscapes", description: "Patios, outdoor kitchens, fire features, retaining walls and front entries for Glastonbury, CT homes. Free estimates from Alpha Hardscapes." },
+    seo: { title: "Hardscaping & Masonry in Glastonbury, CT | Alpha Hardscapes", description: "Patios, outdoor kitchens, fire features, retaining walls and front entries for Glastonbury, CT homes. Free estimates from Alpha Hardscapes." },
   }),
   town(HC[1], HC[0], {
     slug: "west-hartford",
@@ -273,7 +273,7 @@ West Hartford's older homes often have brick and bluestone details worth matchin
     faqs: [
       { question: "What services does a masonry contractor in West Hartford provide?", answer: "Patio installation, walkways, retaining walls, stone features, steps, chimney repair and masonry restoration." },
     ],
-    seo: { title: "Masonry & Hardscape Contractor in West Hartford, CT | Alpha Hardscapes", description: "Custom patios, walkways, retaining walls and stone features for West Hartford, CT. Free estimates from Alpha Hardscapes." },
+    seo: { title: "Masonry & Hardscaping, West Hartford CT | Alpha Hardscapes", description: "Custom patios, walkways, retaining walls and stone features for West Hartford, CT. Free estimates from Alpha Hardscapes." },
   }),
   town(HC[1], HC[0], {
     slug: "berlin",

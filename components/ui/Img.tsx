@@ -9,12 +9,13 @@ type Props = Omit<ImageProps, "src" | "alt" | "width" | "height"> & {
 };
 
 /** next/image wrapper that accepts a local or Sanity image. */
-export function Img({ image, fill, className, style, sizes, ...rest }: Props) {
+export function Img({ image, fill, className, style, sizes, quality = 85, ...rest }: Props) {
   const pos = objectPosition(image);
   const alt = image.alt || "";
   const common = {
     src: image.src,
     className,
+    quality,
     sizes: sizes ?? (fill ? "100vw" : undefined),
     style: pos ? { ...style, objectPosition: pos } : style,
     ...rest,

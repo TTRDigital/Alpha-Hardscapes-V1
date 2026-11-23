@@ -14,7 +14,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Reviews: What Connecticut Homeowners Say About Alpha Hardscapes", description: "Read Google reviews from homeowners across New Haven, Hartford and Fairfield Counties about their patios, walkways, retaining walls and steps built by Alpha Hardscapes.", path: "/reviews/", settings });
+  return buildMetadata({ title: "Reviews: What Connecticut Homeowners Say About Alpha Hardscapes", description: "Google reviews from homeowners across New Haven, Hartford and Fairfield Counties about the patios, walkways, walls and steps Alpha Hardscapes built.", path: "/reviews/", settings });
 }
 
 export default async function ReviewsPage() {

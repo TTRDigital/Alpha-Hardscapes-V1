@@ -83,6 +83,14 @@ export const redirects: R[] = [
   r("/20-off-patios-walkways", "/contact/"),
   r("/optin", "/contact/"),
   r("/patios-walkways", "/services/paver-patios-walkways/"),
+  // Old in-post links and posts that were never published
+  r("/blog/west-hartford", "/service-areas/west-hartford/"),
+  r("/blog/what-to-ask-before-hiring-a-patio-contractor-in-connecticut", "/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance/"),
+  r("/blog/safe-de-icing-for-paver-patios-stone-steps-and-walkways", "/blog/prepare-patio-for-winter-connecticut/"),
+  r("/blog/updated-guide-to-hardscaping-pavers", "/blog/hardscaping-pavers-planning-your-outdoor-space/"),
+  r("/patio-installation-cost-connecticut-cost-guide", "/blog/patio-installation-cost-connecticut-cost-guide/"),
+  r("/outdoor-kitchen-cost-connecticut", "/blog/outdoor-kitchen-cost-connecticut/"),
+  r("/hardscaping-pavers-planning-your-outdoor-space", "/blog/hardscaping-pavers-planning-your-outdoor-space/"),
   // CMS moved from /cms to /studio
   r("/cms", "/studio/"),
   r("/cms/:path*", "/studio/:path*"),

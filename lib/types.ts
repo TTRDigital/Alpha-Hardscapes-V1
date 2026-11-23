@@ -177,6 +177,8 @@ export type HomePage = {
   subheading?: string;
   heroImage?: Img | null;
   heroVideoUrl?: string;
+  reelVideoUrl?: string;
+  reelPosterUrl?: string;
   trustPoints?: string[];
   stats?: { value: string; label: string }[];
   servicesHeading?: string;

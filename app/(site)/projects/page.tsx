@@ -11,7 +11,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Projects: Patios, Walkways, Walls & Outdoor Living in CT", description: "Photos of paver patios, walkways, retaining walls, stone steps, pool patios and fire features built by Alpha Hardscapes across New Haven, Hartford and Fairfield Counties, CT.", path: "/projects/", settings });
+  return buildMetadata({ title: "Patio, Walkway & Retaining Wall Projects", description: "Photos of paver patios, walkways, retaining walls, steps, pool patios and fire pits built by Alpha Hardscapes across New Haven, Hartford and Fairfield Counties, CT.", path: "/projects/", settings });
 }
 
 export default async function ProjectsPage() {

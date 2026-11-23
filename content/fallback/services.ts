@@ -66,7 +66,7 @@ Connecticut patios need to do more than look good. Material selection, base prep
       { question: "Do you offer free consultations?", answer: "Yes. We visit the property, measure, listen to how you want to use the space and send a written estimate at no cost." },
       { question: "Is your work under warranty?", answer: "We stand behind our workmanship. Ask us for the written warranty terms for your project when you receive your estimate." },
     ],
-    seo: { title: "Paver Patios & Walkways in Cheshire, CT | Alpha Hardscapes", description: "Custom paver and natural stone patios and walkways in New Haven, Hartford and Fairfield Counties, CT. Proper base prep, drainage and clean installation. Free estimates." },
+    seo: { title: "Paver Patios & Walkways in Cheshire, CT | Alpha Hardscapes", description: "Custom paver and natural stone patios and walkways in New Haven, Hartford and Fairfield Counties, CT, built on a proper base with drainage. Free estimates." },
   }),
   svc({
     slug: "retaining-walls",
@@ -123,7 +123,7 @@ Wall blocks are interlocking concrete units engineered for retaining walls. They
       { question: "Will a retaining wall add value to my home?", answer: "Yes. A well-built wall protects your property, creates usable space and improves curb appeal, all of which buyers notice." },
       { question: "Do you repair leaning or failing walls?", answer: "Yes. We assess whether the wall can be repaired or should be rebuilt with proper drainage, and we explain the options and costs before any work starts." },
     ],
-    seo: { title: "Retaining Walls in Cheshire & New Haven County, CT | Alpha Hardscapes", description: "Natural stone and wall-block retaining walls built with proper drainage and base preparation. Serving New Haven, Hartford and Fairfield Counties, CT. Free estimates." },
+    seo: { title: "Retaining Wall Contractor, Cheshire CT | Alpha Hardscapes", description: "Natural stone and wall-block retaining walls built with proper drainage and base preparation across New Haven, Hartford and Fairfield Counties, CT." },
   }),
   svc({
     slug: "stone-steps",
@@ -183,7 +183,7 @@ Fieldstone slab steps, bluestone treads on a block base and lit garden steps tur
     excerpt: "Masonry outdoor kitchens with built-in grills, counters, bars and storage, designed as part of a complete patio.",
     eyebrow: "Outdoor kitchens",
     heading: "Outdoor kitchens built, designed and engineered for your backyard",
-    heroImage: img("/images/services/custom-outdoor-kitchens-connecticut-stone-patio-design.webp", "Stone outdoor kitchen with a built-in grill on a paver patio"),
+    heroImage: img("/images/gallery/patio-techo-bloc-lafayette-pat.webp", "Techo-Bloc patio with a built-in grill station and sitting wall"),
     intro:
       "Alpha Hardscapes designs and builds custom outdoor kitchens for homeowners throughout New Haven, Hartford and Fairfield Counties. Every kitchen is built on site with reinforced masonry, built-in grills, stone or concrete counters and the storage, seating and lighting that make it a place you actually cook and gather.",
     highlights: [
@@ -204,7 +204,7 @@ Freeze-thaw winters and humid summers test every outdoor structure. We build on 
 `),
     gallery: [
       img("/images/services/custom-outdoor-kitchens-connecticut-backyard-landscape.webp", "Outdoor kitchen with pergola on a backyard patio"),
-      img("/images/gallery/patio-techo-bloc-lafayette-pat.webp", "Patio with a built-in grill and sitting wall"),
+      img("/images/services/custom-outdoor-kitchens-connecticut-stone-patio-design.webp", "Stone outdoor kitchen with a built-in grill on a paver patio"),
       img("/images/services/alphahardscapes-image-2.webp", "Outdoor kitchen with stone countertops"),
     ],
     materials: ["Granite and bluestone counters", "Stone veneer", "Techo-Bloc and Unilock wall units", "Stainless outdoor appliances"],
@@ -213,7 +213,7 @@ Freeze-thaw winters and humid summers test every outdoor structure. We build on 
       { question: "Are outdoor kitchens built for long-term durability?", answer: "Yes. We use reinforced masonry, flashed and sealed counters and outdoor-rated appliances so the kitchen resists cracking, moisture and surface wear." },
       { question: "How is the layout decided?", answer: "We start with your patio dimensions, the path from the house and how you like to cook and entertain, then place the grill, prep space and seating so the kitchen feels natural to use." },
     ],
-    seo: { title: "Custom Outdoor Kitchens in Connecticut | Alpha Hardscapes", description: "Masonry outdoor kitchens with built-in grills, counters and bars, designed with your patio. Serving New Haven, Hartford and Fairfield Counties, CT. Free estimates." },
+    seo: { title: "Custom Outdoor Kitchens in Connecticut | Alpha Hardscapes", description: "Masonry outdoor kitchens with built-in grills, counters and bars, designed with your patio. New Haven, Hartford and Fairfield Counties, CT. Free estimates." },
   }),
   svc({
     slug: "fire-pits-fireplaces",
@@ -255,7 +255,7 @@ We follow Connecticut fire clearance guidelines and manufacturer specifications 
       { question: "Are outdoor fire features safe for residential properties?", answer: "Yes, when built with the right liner, base and clearances from structures and overhangs. We design to Connecticut guidelines and manufacturer specifications." },
       { question: "Do fire features need maintenance?", answer: "Very little. Clear ash from wood pits, cover gas burners in winter and have the masonry checked for joints every few years." },
     ],
-    seo: { title: "Fire Pits & Outdoor Fireplaces in Connecticut | Alpha Hardscapes", description: "Masonry fire pits and outdoor fireplaces, wood or gas, built for Connecticut patios and backyards. Serving New Haven, Hartford and Fairfield Counties. Free estimates." },
+    seo: { title: "Fire Pits & Outdoor Fireplaces, CT | Alpha Hardscapes", description: "Masonry fire pits and outdoor fireplaces, wood or gas, built for Connecticut patios across New Haven, Hartford and Fairfield Counties. Free estimates." },
   }),
   svc({
     slug: "pool-patios",
@@ -422,7 +422,7 @@ Crumbling or missing mortar, white staining, loose bricks, a cracked crown, wate
     excerpt: "Natural thin-stone veneer for foundations, walls, chimneys, fireplaces and outdoor kitchens.",
     eyebrow: "Thinstone",
     heading: "Thin stone veneer, refined and durable",
-    heroImage: img("/images/services/expert-thinstone-installation-connecticut-home-facade.webp", "Stone veneer on a home facade"),
+    heroImage: img("/images/gallery/retaining-wall-stoneyard-stone-veneer-b.webp", "Natural stone veneer on a retaining wall beside a lawn"),
     intro:
       "Alpha Hardscapes installs natural thin stone veneer across Connecticut to give walls, foundations, chimneys, fireplaces and kitchen islands the look of full stone without the weight. Each installation uses a proper moisture barrier, lath and bonding system so the stone stays put through Connecticut winters.",
     highlights: [
@@ -441,12 +441,12 @@ Crumbling or missing mortar, white staining, loose bricks, a cracked crown, wate
 ## Installation
 We prepare the substrate with a weather-resistive barrier and lath, apply a scratch coat, set each stone in mortar and finish the joints to your preferred style: tight dry-stack or grouted.
 `),
-    gallery: [img("/images/services/expert-thinstone-installation-connecticut-fireplace-wall.webp", "Interior fireplace wall with stone veneer")],
+    gallery: [img("/images/services/expert-thinstone-installation-connecticut-home-facade.webp", "Stone veneer on a home facade"), img("/images/services/expert-thinstone-installation-connecticut-fireplace-wall.webp", "Interior fireplace wall with stone veneer")],
     faqs: [
       { question: "Can thinstone be used indoors and outdoors?", answer: "Yes. The same natural veneer suits exterior walls, chimneys and foundations as well as interior fireplaces and feature walls." },
       { question: "Is thinstone durable in Connecticut weather?", answer: "Installed over a proper moisture barrier with the right mortar, natural thin veneer handles freeze-thaw cycles and moisture for decades." },
     ],
-    seo: { title: "Thin Stone Veneer Installation in Connecticut | Alpha Hardscapes", description: "Natural thin-stone veneer for foundations, chimneys, fireplaces and walls, installed with proper moisture barriers. New Haven, Hartford and Fairfield Counties, CT." },
+    seo: { title: "Thin Stone Veneer Installation, CT | Alpha Hardscapes", description: "Natural thin-stone veneer for foundations, chimneys, fireplaces and walls, installed over proper moisture barriers across Southern Connecticut." },
   }),
   svc({
     slug: "paver-repair-maintenance",
@@ -533,7 +533,7 @@ Because we build the patio, walls and steps too, the planting is designed with t
       { question: "Do you offer landscape maintenance?", answer: "Yes. We offer seasonal clean-ups, pruning, mulching and bed refreshes for the landscapes we install and for existing properties." },
       { question: "Can you landscape around a new patio?", answer: "Yes, and it is the best time to do it. We design the beds, lawn and lighting with the hardscape so everything is graded and planted once." },
     ],
-    seo: { title: "Landscaping in New Haven & Fairfield County, CT | Alpha Hardscapes", description: "Landscape design, planting, lawns, mulch and seasonal colour that complement your patio and walls. Serving New Haven, Hartford and Fairfield Counties, CT." },
+    seo: { title: "Landscaping in New Haven & Fairfield County, CT | Alpha", description: "Landscape design, planting, lawns, mulch and seasonal colour that complement your patio and walls. Serving New Haven, Hartford and Fairfield Counties, CT." },
   }),
   svc({
     slug: "seasonal-cleanup",

@@ -8,11 +8,13 @@ import type { Img as ImgT } from "@/lib/types";
 export function BeforeAfter({ before, after, className = "" }: { before: ImgT; after: ImgT; className?: string }) {
   const [pos, setPos] = useState(50);
   const id = useId();
+  const w = after.width ?? 1200;
+  const h = after.height ?? 900;
   return (
-    <div className={`relative aspect-[4/3] select-none overflow-hidden rounded-2xl bg-stone-200 ${className}`}>
-      <Img image={after} fill sizes="(min-width: 1024px) 760px, 100vw" className="object-cover" />
+    <div className={`relative mx-auto w-full select-none overflow-hidden rounded-2xl bg-stone-200 ${className}`} style={{ aspectRatio: `${w} / ${h}`, maxWidth: Math.max(360, Math.round(w / 1.15)) }}>
+      <Img image={after} fill sizes={`${Math.round(w / 1.15)}px`} quality={90} className="object-cover" />
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <Img image={before} fill sizes="(min-width: 1024px) 760px, 100vw" className="object-cover" />
+        <Img image={before} fill sizes={`${Math.round(w / 1.15)}px`} quality={90} className="object-cover" />
       </div>
       <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-white shadow" style={{ left: `${pos}%` }}>
         <span className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-ink shadow-lift">↔</span>

@@ -17,7 +17,9 @@ type Opts = {
 /** Builds Next.js metadata from a page's SEO fields with sensible defaults. */
 export function buildMetadata({ title, description, path, seo, image, type = "website", publishedTime, modifiedTime, settings }: Opts): Metadata {
   const business = settings?.businessName || "Alpha Hardscapes";
-  const t = seo?.title || (title.includes(business) ? title : `${title} | ${business}`);
+  // Keep titles under ~65 characters: drop the brand suffix when it would push the title over.
+  const withBrand = title.includes(business) ? title : `${title} | ${business}`;
+  const t = seo?.title || (withBrand.length <= 65 ? withBrand : title);
   const d = seo?.description || description || settings?.seo?.description || "";
   const img = seo?.image || image || null;
   const url = absUrl(path);

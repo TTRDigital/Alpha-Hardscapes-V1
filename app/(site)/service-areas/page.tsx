@@ -13,7 +13,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Service Areas: Hardscaping & Masonry Across Connecticut", description: "Alpha Hardscapes builds patios, walkways, retaining walls and outdoor living spaces throughout New Haven, Hartford and Fairfield Counties, CT. See the towns we serve.", path: "/service-areas/", settings });
+  return buildMetadata({ title: "Service Areas in Connecticut", description: "Alpha Hardscapes builds patios, walkways, retaining walls and outdoor living spaces throughout New Haven, Hartford and Fairfield Counties, CT. See our towns.", path: "/service-areas/", settings });
 }
 
 export default async function AreasPage() {

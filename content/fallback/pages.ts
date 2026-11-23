@@ -8,7 +8,10 @@ export const homePage: HomePage = {
   heading: "Patios, walkways and walls built to last a Connecticut lifetime.",
   subheading:
     "Alpha Hardscapes designs and builds paver patios, natural stone walkways, retaining walls, steps, outdoor kitchens and fire features for homeowners across New Haven, Hartford and Fairfield Counties. One crew, one point of contact, a free on-site estimate.",
-  heroImage: img("/images/gallery/patio-1804.webp", "Paver patio with a round stone fire pit behind a Connecticut home"),
+  heroImage: img("/images/brand/hero-poster.webp", "Lit pool, paver patio and fire pit behind a Connecticut home at dusk"),
+  heroVideoUrl: "/images/brand/hero.mp4",
+  reelVideoUrl: "/images/brand/reel-vertical.mp4",
+  reelPosterUrl: "/images/brand/reel-vertical-poster.webp",
   trustPoints: ["Free on-site estimates", "Fully insured", "Based in Cheshire, CT"],
   stats: [
     { value: "20+", label: "years of combined experience" },
@@ -22,7 +25,7 @@ export const homePage: HomePage = {
   aboutHeading: "A small, hands-on crew led by its founder",
   aboutText:
     "Sebastian Ullrich started Alpha Hardscapes after years in the field, and he is still on site for every project. That means the person who gives you the estimate is the person who builds the job, answers the phone and does the final walk-through with you.",
-  aboutImage: img("/images/people/sebastian-ullrich.webp", "Sebastian Ullrich, founder of Alpha Hardscapes"),
+  aboutImage: img("/images/people/sebastian-cutout.webp", "Sebastian Ullrich, founder of Alpha Hardscapes"),
   whyHeading: "Why Connecticut homeowners choose Alpha Hardscapes",
   whyItems: [
     { title: "Craftsmanship you can see", text: "Tight joints, straight borders and clean cuts on every patio, walkway and wall.", icon: "hammer" },
@@ -46,9 +49,8 @@ export const homePage: HomePage = {
   areasText: "Based in Cheshire and serving homeowners throughout New Haven County, Hartford County and Fairfield County, Connecticut.",
   faqHeading: "Common questions",
   seo: {
-    title: "Hardscaping, Paver & Masonry Contractor in Cheshire, CT | Alpha Hardscapes",
-    description:
-      "Alpha Hardscapes designs and builds paver patios, walkways, retaining walls, stone steps, outdoor kitchens and fire features across New Haven, Hartford and Fairfield Counties, CT. Free estimates.",
+    title: "Hardscaping & Masonry Contractor, Cheshire CT | Alpha Hardscapes",
+    description: "Paver patios, walkways, retaining walls, stone steps, outdoor kitchens and fire pits across New Haven, Hartford and Fairfield Counties, CT. Free estimates.",
   },
 };
 
@@ -59,7 +61,7 @@ export const aboutPage: AboutPage = {
   heroImage: img("/images/gallery/g-IMG_1601.webp", "Paver patio with a stone wall built by Alpha Hardscapes"),
   founderName: "Sebastian Ullrich",
   founderTitle: "Founder & owner",
-  founderImage: img("/images/people/sebastian-ullrich.webp", "Sebastian Ullrich, founder of Alpha Hardscapes"),
+  founderImage: img("/images/people/sebastian-cutout.webp", "Sebastian Ullrich, founder of Alpha Hardscapes, in an Alpha Hardscapes shirt"),
   founderBio: pt(`
 Sebastian's passion for hardscaping began early in his career, working hands-on in the field and learning the craftsmanship and attention to detail that exceptional outdoor spaces demand. His dedication to quality, customer satisfaction and thoughtful design has made Alpha Hardscapes a trusted name across New Haven County, Hartford County and Fairfield County.
 
@@ -81,7 +83,7 @@ Stone and brick masonry, retaining walls, steps, chimneys, stone veneer, concret
 ## Landscaping services
 Custom landscape design, garden installation and planting, mulching and edging, lawn installation, seasonal clean-ups and maintenance.
 `),
-  seo: { title: "About Alpha Hardscapes | Hardscaping & Masonry in Cheshire, CT", description: "Meet Alpha Hardscapes, a Cheshire-based hardscaping and masonry team building patios, walkways, retaining walls, steps and outdoor living spaces across Southern Connecticut." },
+  seo: { title: "About Alpha Hardscapes | Hardscaping & Masonry in Cheshire, CT", description: "Meet Sebastian Ullrich and the Cheshire-based Alpha Hardscapes crew building patios, walkways, retaining walls and steps across Southern Connecticut." },
 };
 
 export const pages: Page[] = (legal as unknown as Page[]).map((p) => ({ ...p }));

@@ -57,8 +57,7 @@ export const settings: SiteSettings = {
     "Tell us about your patio, walkway, wall or outdoor living project. We will visit the site, talk through materials and send a clear written estimate, free of charge.",
   formThankYouPath: "/thank-you/",
   seo: {
-    title: "Hardscaping, Paver & Masonry Contractor in Cheshire, CT | Alpha Hardscapes",
-    description:
-      "Alpha Hardscapes designs and builds paver patios, walkways, retaining walls, stone steps, outdoor kitchens and fire features across New Haven, Hartford and Fairfield Counties, CT. Free estimates.",
+    title: "Hardscaping & Masonry Contractor, Cheshire CT | Alpha Hardscapes",
+    description: "Paver patios, walkways, retaining walls, stone steps, outdoor kitchens and fire pits across New Haven, Hartford and Fairfield Counties, CT. Free estimates.",
   },
 };

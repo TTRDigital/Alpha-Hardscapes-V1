@@ -42,6 +42,7 @@ test("redirects point at pages that exist in the built-in content", () => {
     "/", "/services/", "/projects/", "/about/", "/faq/", "/service-areas/", "/terms/", "/contact/", "/blog/", "/thank-you/", "/studio/",
     ...fb.services.map((s) => `/services/${s.slug}/`),
     ...fb.areas.map((a) => `/service-areas/${a.slug}/`),
+    ...fb.posts.map((p) => `/blog/${p.slug}/`),
   ]);
   for (const r of redirects) {
     if (r.destination.includes(":")) continue; // pattern redirects
@@ -52,9 +53,46 @@ test("redirects point at pages that exist in the built-in content", () => {
   assert.equal(new Set(sources).size, sources.length, "no duplicate redirect sources");
 });
 
-test("SEO descriptions stay within Google's limits", () => {
-  for (const s of fb.services) {
-    assert.ok((s.seo?.title || "").length <= 70, `${s.slug} title length`);
-    assert.ok((s.seo?.description || "").length <= 170, `${s.slug} description length`);
+
+test("internal links inside content resolve to a page or a redirect", () => {
+  const known = new Set<string>([
+    "/", "/services/", "/projects/", "/about/", "/faq/", "/service-areas/", "/contact/", "/blog/", "/reviews/", "/privacy-policy/", "/terms/",
+    ...fb.services.map((s) => `/services/${s.slug}/`),
+    ...fb.areas.map((a) => `/service-areas/${a.slug}/`),
+    ...fb.posts.map((p) => `/blog/${p.slug}/`),
+    ...fb.projects.map((p) => `/projects/${p.slug}/`),
+  ]);
+  const redirected = new Set(redirects.map((r) => r.source));
+  const broken: string[] = [];
+  const walk = (v: unknown, where: string) => {
+    if (Array.isArray(v)) return v.forEach((x) => walk(x, where));
+    if (v && typeof v === "object") {
+      const o = v as Record<string, unknown>;
+      if (o._type === "link" && typeof o.href === "string") {
+        const h = o.href.replace(/^https?:\/\/(www\.)?alphahardscapes\.com/, "").split("#")[0];
+        if (h.startsWith("/")) {
+          const withSlash = h.endsWith("/") ? h : `${h}/`;
+          if (!known.has(withSlash) && !redirected.has(withSlash.replace(/\/$/, ""))) broken.push(`${where}: ${h}`);
+        }
+      }
+      Object.values(o).forEach((x) => walk(x, where));
+    }
+  };
+  for (const p of fb.posts) walk(p.body, `post ${p.slug}`);
+  for (const p of fb.pages) walk(p.body, `page ${p.slug}`);
+  for (const s of fb.services) walk(s.body, `service ${s.slug}`);
+  for (const a of fb.areas) walk(a.body, `area ${a.slug}`);
+  assert.deepEqual(broken, []);
+});
+
+test("SEO titles and descriptions on every built-in page fit in search results", () => {
+  const all: [string, { title?: string; description?: string } | undefined][] = [
+    ["home", fb.homePage.seo], ["about", fb.aboutPage.seo],
+    ...fb.services.map((s) => [`service ${s.slug}`, s.seo] as [string, typeof s.seo]),
+    ...fb.areas.map((a) => [`area ${a.slug}`, a.seo] as [string, typeof a.seo]),
+  ];
+  for (const [k, s] of all) {
+    assert.ok((s?.title || "").length <= 65, `${k} title is ${(s?.title || "").length} characters`);
+    assert.ok((s?.description || "").length <= 160, `${k} description is ${(s?.description || "").length} characters`);
   }
 });

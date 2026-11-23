@@ -55,9 +55,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {project.materials && project.materials.length > 0 && (<div className="col-span-2"><dt className="font-bold uppercase tracking-wider text-stone-500 text-[11px]">Materials</dt><dd className="mt-1 font-semibold">{project.materials.join(", ")}</dd></div>)}
           </dl>
         </div>
-        <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl bg-stone-200">
-          <Img image={project.coverImage} fill priority sizes="(min-width: 1280px) 1240px, 100vw" className="object-cover" />
-        </div>
+        {(project.coverImage.width ?? 2560) >= 1600 ? (
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl bg-stone-200">
+            <Img image={project.coverImage} fill priority sizes="(min-width: 1280px) 1240px, 100vw" quality={85} className="object-cover" />
+          </div>
+        ) : (
+          <div className="mt-8 rounded-3xl bg-stone-100 p-4 sm:p-6">
+            <div className="relative mx-auto overflow-hidden rounded-2xl" style={{ maxWidth: Math.round((project.coverImage.width ?? 800) / 1.15), aspectRatio: `${project.coverImage.width ?? 4} / ${project.coverImage.height ?? 3}` }}>
+              <Img image={project.coverImage} fill priority sizes="700px" quality={90} className="object-cover" />
+            </div>
+          </div>
+        )}
       </section>
 
       <section className="container-x grid gap-12 py-12 lg:grid-cols-12 sm:py-16">

@@ -11,7 +11,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Frequently Asked Questions: Hardscaping & Masonry", description: "Answers about estimates, timelines, materials, financing, maintenance and the areas Alpha Hardscapes serves in Connecticut.", path: "/faq/", settings });
+  return buildMetadata({ title: "Hardscaping & Masonry FAQ", description: "Answers about estimates, timelines, materials, financing, maintenance and the areas Alpha Hardscapes serves in Connecticut.", path: "/faq/", settings });
 }
 
 export default async function FaqPage() {

@@ -168,7 +168,7 @@ async function buildDocuments() {
   console.log("Home & about");
   const h = fb.homePage;
   docs.push({
-    _id: "homePage", _type: "homePage", eyebrow: h.eyebrow, heading: h.heading, subheading: h.subheading, heroImage: await photo(h.heroImage), heroVideoUrl: h.heroVideoUrl,
+    _id: "homePage", _type: "homePage", eyebrow: h.eyebrow, heading: h.heading, subheading: h.subheading, heroImage: await photo(h.heroImage), heroVideoUrl: h.heroVideoUrl, reelVideoUrl: h.reelVideoUrl, reelPosterUrl: h.reelPosterUrl,
     trustPoints: h.trustPoints, stats: withKeys(h.stats), servicesHeading: h.servicesHeading, servicesText: h.servicesText,
     featuredServices: withKeys(fb.services.filter((x) => x.featured).map((x) => ref(x._id))), projectsHeading: h.projectsHeading, projectsText: h.projectsText,
     featuredProjects: withKeys(fb.projects.filter((x) => x.featured).map((x) => ref(x._id))), aboutHeading: h.aboutHeading, aboutText: h.aboutText, aboutImage: await photo(h.aboutImage),

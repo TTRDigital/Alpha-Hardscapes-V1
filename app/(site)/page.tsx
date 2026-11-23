@@ -6,6 +6,7 @@ import { GoogleBadge } from "@/components/ui/Rating";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { EstimateForm } from "@/components/blocks/EstimateForm";
+import { HeroVideo } from "@/components/blocks/HeroVideo";
 import { FeatureItem, ProjectCard, ServiceCard, TestimonialCard } from "@/components/blocks/Cards";
 import { BeforeAfter } from "@/components/blocks/BeforeAfter";
 import { FaqList, faqJsonLd } from "@/components/blocks/Faq";
@@ -42,11 +43,7 @@ export default async function HomePage() {
         {home.heroImage && (
           <Img image={home.heroImage} fill priority sizes="100vw" className="-z-20 object-cover" />
         )}
-        {home.heroVideoUrl && (
-          <video className="absolute inset-0 -z-10 hidden h-full w-full object-cover lg:block" autoPlay muted loop playsInline poster={home.heroImage?.src} aria-hidden="true">
-            <source src={home.heroVideoUrl} />
-          </video>
-        )}
+        {home.heroVideoUrl && <HeroVideo src={home.heroVideoUrl} poster={home.heroImage?.src} />}
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/60 to-ink/20" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink/80 to-transparent" aria-hidden="true" />
         <div className="container-x grid min-h-[calc(100svh-72px)] items-center gap-10 py-14 lg:grid-cols-12 lg:py-20">
@@ -120,15 +117,28 @@ export default async function HomePage() {
       <Section tone="muted" id="why">
         <div className="grid items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            {home.aboutImage && (
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-stone-200">
-                <Img image={home.aboutImage} fill sizes="(min-width: 1024px) 480px, 100vw" className="object-cover" />
-                <div className="absolute bottom-5 left-5 right-5 rounded-2xl bg-ink/80 p-4 text-stone-50 backdrop-blur">
-                  <p className="font-display text-lg leading-snug">“The person who writes your estimate is the person who builds your project.”</p>
-                  <p className="mt-2 text-[13px] text-stone-300">Sebastian Ullrich, founder</p>
+            {home.reelVideoUrl ? (
+              <div className="relative mx-auto max-w-[420px]">
+                <div className="relative aspect-[2/3] overflow-hidden rounded-3xl bg-ink shadow-lift">
+                  <video className="absolute inset-0 h-full w-full object-cover" src={home.reelVideoUrl} poster={home.reelPosterUrl} muted loop playsInline autoPlay controls preload="metadata" aria-label="Alpha Hardscapes crew at work" />
                 </div>
+                {home.aboutImage && (
+                  <div className="absolute -bottom-6 -left-4 flex items-center gap-3 rounded-2xl bg-white p-3 pr-5 shadow-lift ring-1 ring-ink/5 sm:-left-8">
+                    <div className="relative h-14 w-14 overflow-hidden rounded-full bg-ink">
+                      <Img image={home.aboutImage} fill sizes="112px" quality={90} className="object-cover object-top" />
+                    </div>
+                    <div>
+                      <p className="text-[15px] font-bold leading-tight">Sebastian Ullrich</p>
+                      <p className="text-[13px] text-stone-500">Founder, on site for every job</p>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+            ) : home.aboutImage ? (
+              <div className="relative mx-auto aspect-square max-w-[440px] overflow-hidden rounded-3xl bg-ink">
+                <Img image={home.aboutImage} fill sizes="440px" quality={90} className="object-cover object-top" />
+              </div>
+            ) : null}
           </div>
           <div className="lg:col-span-7">
             <SectionHeading eyebrow="Why Alpha" title={home.whyHeading || "Why homeowners choose Alpha Hardscapes"} text={home.aboutText} />

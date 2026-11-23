@@ -11,8 +11,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/leaning-retaining-wall-repair-or-rebuild-connecticut.webp",
    "alt": "Why is my retaining wall leaning, and can it be repaired?",
-   "width": 1200,
-   "height": 630
+   "width": 1920,
+   "height": 1080
   },
   "body": [
    {
@@ -693,8 +693,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/fire-pit-on-paver-patio-connecticut.webp",
    "alt": "Can you put a fire pit on a paver patio?",
-   "width": 1200,
-   "height": 630
+   "width": 876,
+   "height": 584
   },
   "body": [
    {
@@ -2481,8 +2481,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/natural-stone-vs-wall-block.webp",
    "alt": "Natural Stone vs Wall Block Retaining Walls: Which Should You Choose?",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -3199,7 +3199,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "881d1ecbdb6a",
-      "href": "/blog/what-to-ask-before-hiring-a-patio-contractor-in-connecticut/"
+      "href": "/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance/"
      }
     ],
     "children": [
@@ -3673,8 +3673,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/patio-and-walkway-maintenance-checklist.webp",
    "alt": "Patio and Walkway Maintenance Checklist for Connecticut Homeowners",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -4627,7 +4627,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "eda42d1a1e54",
-      "href": "/blog/safe-de-icing-for-paver-patios-stone-steps-and-walkways/"
+      "href": "/blog/prepare-patio-for-winter-connecticut/"
      }
     ],
     "children": [
@@ -4771,7 +4771,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "22268953efc6",
-      "href": "/blog/what-to-ask-before-hiring-a-patio-contractor-in-connecticut/"
+      "href": "/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance/"
      }
     ],
     "children": [
@@ -5225,8 +5225,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/hardscape-upgrades-before-fall.webp",
    "alt": "Hardscape Upgrades Before Fall Connecticut: 2026 Checklist",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -6010,7 +6010,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "1c71efbda8c3",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      },
      {
       "_type": "link",
@@ -6295,8 +6295,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/how-long-does-a-paver-patio-last.webp",
    "alt": "How Long Does a Paver Patio Last in Connecticut? Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -7257,7 +7257,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "6fa1098ea482",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -7572,8 +7572,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/paver-patio-vs-natural-stone-patio-connecticut.webp",
    "alt": "Paver Patio vs Natural Stone Patio: Connecticut Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -8677,8 +8677,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/patio-around-outdoor-kitchen-ct.webp",
    "alt": "Patio Around Outdoor Kitchen: CT Design & Layout Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -9793,8 +9793,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/fire-pit-vs-outdoor-fireplace-connecticut-guide.webp",
    "alt": "Fire Pit vs Outdoor Fireplace: Connecticut Guide 2026",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -10085,7 +10085,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "db9b23a98324",
-      "href": "/patio-installation-cost-connecticut-cost-guide/"
+      "href": "/blog/patio-installation-cost-connecticut-cost-guide/"
      }
     ],
     "children": [
@@ -10491,12 +10491,12 @@ const posts = [
      {
       "_type": "link",
       "_key": "8330491613c7",
-      "href": "/outdoor-kitchen-cost-connecticut/"
+      "href": "/blog/outdoor-kitchen-cost-connecticut/"
      },
      {
       "_type": "link",
       "_key": "55aaf10a7e8a",
-      "href": "/hardscaping-pavers-planning-your-outdoor-space/"
+      "href": "/blog/hardscaping-pavers-planning-your-outdoor-space/"
      }
     ],
     "children": [
@@ -10620,7 +10620,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "20efd02d91d9",
-      "href": "/patio-installation-cost-connecticut-cost-guide/"
+      "href": "/blog/patio-installation-cost-connecticut-cost-guide/"
      }
     ],
     "children": [
@@ -11094,17 +11094,17 @@ const posts = [
      {
       "_type": "link",
       "_key": "76a390f150a3",
-      "href": "/patio-installation-cost-connecticut-cost-guide/"
+      "href": "/blog/patio-installation-cost-connecticut-cost-guide/"
      },
      {
       "_type": "link",
       "_key": "18f972b81127",
-      "href": "/outdoor-kitchen-cost-connecticut/"
+      "href": "/blog/outdoor-kitchen-cost-connecticut/"
      },
      {
       "_type": "link",
       "_key": "bc7eda46656e",
-      "href": "/hardscaping-pavers-planning-your-outdoor-space/"
+      "href": "/blog/hardscaping-pavers-planning-your-outdoor-space/"
      }
     ],
     "children": [
@@ -11175,8 +11175,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/small-backyard-patio-ideas-connecticut.webp",
    "alt": "Small Backyard Patio Ideas Connecticut: 15 Designs Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -11915,7 +11915,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "dc701e4ca356",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -12224,8 +12224,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/pool-patio-materials-connecticut.webp",
    "alt": "Pool Patio Materials Connecticut: Pavers, Stone, Concrete",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -12802,7 +12802,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "da5f8a21dc5d",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -13054,7 +13054,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "ca4d4a384039",
-      "href": "/blog/updated-guide-to-hardscaping-pavers/"
+      "href": "/blog/hardscaping-pavers-planning-your-outdoor-space/"
      }
     ],
     "children": [
@@ -13125,8 +13125,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/backyard-remodel-ideas-connecticut.webp",
    "alt": "Backyard Remodel Ideas Connecticut: Patio & Outdoor Plans",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -13729,7 +13729,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "52dc285649c5",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -14082,8 +14082,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/outdoor-kitchen-cost-connecticut.webp",
    "alt": "Outdoor Kitchen Cost Connecticut: Complete Budget Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -15083,8 +15083,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/best-patio-materials-connecticut.webp",
    "alt": "Best Patio Materials Connecticut: Pavers, Bluestone",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -15788,7 +15788,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "c5591f65d84e",
-      "href": "/blog/updated-guide-to-hardscaping-pavers/",
+      "href": "/blog/hardscaping-pavers-planning-your-outdoor-space/",
       "target": "_blank",
       "rel": "noopener"
      }
@@ -16164,8 +16164,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/patio-installation-cost-connecticut-cost-guide.webp",
    "alt": "Patio Installation Cost Connecticut: Complete Cost Guide",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -16190,7 +16190,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "77aaf8d6647c",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -16755,7 +16755,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "5f025a98d636",
-      "href": "/blog/west-hartford/"
+      "href": "/service-areas/west-hartford/"
      }
     ],
     "children": [
@@ -17141,7 +17141,7 @@ const posts = [
      {
       "_type": "link",
       "_key": "761e67d844a3",
-      "href": "/blog/updated-guide-to-hardscaping-pavers/"
+      "href": "/blog/hardscaping-pavers-planning-your-outdoor-space/"
      }
     ],
     "children": [
@@ -17422,8 +17422,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/hardscaping-pavers-planning-your-outdoor-space.webp",
    "alt": "Updated Guide to Hardscaping Pavers: Planning Your Outdoor Space",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {
@@ -18401,8 +18401,8 @@ const posts = [
   "featuredImage": {
    "src": "/images/blog/hardscaping-pavers-contractor-complete-guide-to-planning-installation-and-maintenance.webp",
    "alt": "Hardscaping & Pavers: Planning, Installation, and Long‑Term Maintenance (Complete Guide)",
-   "width": 1200,
-   "height": 630
+   "width": 1536,
+   "height": 512
   },
   "body": [
    {

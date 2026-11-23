@@ -15,7 +15,9 @@ export const homePage = defineType({
     defineField({ name: "heading", title: "Headline", type: "string", group: "hero", validation: (r) => r.required() }),
     defineField({ name: "subheading", title: "Supporting text", type: "text", rows: 3, group: "hero" }),
     defineField({ name: "heroImage", title: "Hero photo", type: "photo", group: "hero" }),
-    defineField({ name: "heroVideoUrl", title: "Hero video URL (optional, MP4/WebM)", type: "string", group: "hero", description: "Plays silently over the photo on desktop when set." }),
+    defineField({ name: "heroVideoUrl", title: "Hero background video (MP4)", type: "string", group: "hero", description: "Plays silently behind the headline on all screens. The hero photo is shown until it loads. Path like /images/brand/hero.mp4 or a full URL." }),
+    defineField({ name: "reelVideoUrl", title: "'Why us' video (vertical MP4, optional)", type: "string", group: "sections", description: "Shown next to the 'Why us' section with play controls. Leave empty to show the About photo instead." }),
+    defineField({ name: "reelPosterUrl", title: "'Why us' video cover image path", type: "string", group: "sections" }),
     defineField({ name: "trustPoints", title: "Trust points under the headline", type: "array", of: [{ type: "string" }], group: "hero", description: "Three short items, e.g. 'Free on-site estimates'" }),
     defineField({ name: "stats", title: "Numbers", type: "array", group: "hero", of: [defineArrayMember({ type: "object", name: "stat", fields: [defineField({ name: "value", title: "Value", type: "string" }), defineField({ name: "label", title: "Label", type: "string" })], preview: { select: { title: "value", subtitle: "label" } } })] }),
 

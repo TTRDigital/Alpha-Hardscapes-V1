@@ -48,8 +48,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <p className="mt-4 text-sm text-stone-500">By {post.author || settings.businessName}</p>
           </div>
           {post.featuredImage && (
-            <div className="relative mx-auto mt-10 aspect-[16/9] max-w-5xl overflow-hidden rounded-3xl bg-stone-200">
-              <Img image={post.featuredImage} fill priority sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
+            <div className="relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl bg-stone-200" style={{ aspectRatio: `${post.featuredImage.width ?? 16} / ${post.featuredImage.height ?? 9}` }}>
+              <Img image={post.featuredImage} fill priority sizes="(min-width: 1024px) 1024px, 100vw" quality={90} className="object-cover" />
             </div>
           )}
         </header>

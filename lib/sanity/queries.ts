@@ -43,7 +43,7 @@ export const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
 }`;
 
 export const HOME_QUERY = `*[_type == "homePage"][0]{
-  eyebrow, heading, subheading, heroVideoUrl, trustPoints, stats[]{value, label},
+  eyebrow, heading, subheading, heroVideoUrl, reelVideoUrl, reelPosterUrl, trustPoints, stats[]{value, label},
   "heroImage": heroImage${IMG},
   servicesHeading, servicesText, "featuredServices": featuredServices[]->${SERVICE_SUMMARY},
   projectsHeading, projectsText, "featuredProjects": featuredProjects[]->${PROJECT_SUMMARY},

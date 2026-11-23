@@ -13,7 +13,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ title: "Hardscaping Guides & Advice for Connecticut Homeowners", description: "Costs, materials, maintenance and planning guides for patios, walkways, retaining walls, outdoor kitchens and fire features in Connecticut, from Alpha Hardscapes.", path: "/blog/", settings });
+  return buildMetadata({ title: "Hardscaping Guides for Connecticut Homeowners", description: "Costs, materials, maintenance and planning guides for patios, walkways, retaining walls, outdoor kitchens and fire features in Connecticut, from Alpha Hardscapes.", path: "/blog/", settings });
 }
 
 export default async function BlogPage() {
