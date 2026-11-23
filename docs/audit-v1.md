@@ -30,8 +30,29 @@ Every URL in the sitemap (67 pages) was loaded in Chromium at desktop (1440px, 2
 | 404s from links inside blog posts (/blog/west-hartford/, old root-level post URLs, three posts that were never published) | 20 links repointed to live pages, matching 301 redirects added, and a test now fails the build if any internal content link breaks. |
 | 15 titles over 65 characters and 8 descriptions over 165 | Shortened. Generated titles drop the brand suffix when it would push them over 65; a test enforces the limits on built-in content. |
 
+## Re-audit after the fixes (deployment 185be9d)
+
+| Check | Result |
+|---|---|
+| Page loads returning 200 | 134 of 134 |
+| Console errors / failed requests | 0 / 0 |
+| Broken images, missing alt, pages without one H1, horizontal overflow | 0 |
+| Titles over 65 / descriptions over 165 characters | 0 / 0 |
+| Images served below their full original size | 0 |
+
+22 images still fall short of what a 2x (retina) screen could use, and in every case the largest file that exists is already served:
+
+| Source | Largest original | Where it shows |
+|---|---|---|
+| Hero video and its poster frame | 1094x720 | Home hero (behind the headline) |
+| Before/after halves, cut from the old collages | 486 to 627px wide | Home slider, project pages, chimney service gallery |
+| Service-area map | 702x626 | Home and Service areas |
+| Fire pit blog illustration / winter blog image | 876px / 1200px | Those two posts |
+| Job photos taken at 1920px | 1920px | Full-width heroes on a few service and town pages (about 1.5x, sharp on normal screens) |
+
 ## Still open (needs the client)
 
 - A high-resolution headshot of Sebastian (at least 1600px).
 - Real photos for decks, chimneys and seasonal services (those pages still use the old illustrations, now shown small).
 - The hero video is the live site's 1094x720 clip. A 1920x1080 or 4K export of the same footage would make the hero sharper on large screens.
+- The separate before and after photos behind the six collages (the collages were assembled at about 500px per side).
