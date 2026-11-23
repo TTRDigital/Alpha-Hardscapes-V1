@@ -1,0 +1,73 @@
+# Deploy, environment variables and publish-to-rebuild
+
+## 1. Environment variables
+
+Set these in the hosting project (Vercel → Project → Settings → Environment Variables) and, for the seed, in GitHub → Settings → Secrets and variables → Actions. Never commit real values; `.env.example` lists them.
+
+| Variable | Where | Secret? | Purpose |
+|---|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Vercel | no | `https://alphahardscapes.com` (canonical URLs, sitemap, Open Graph) |
+| `NEXT_PUBLIC_ALPHA_SANITY_PROJECT_ID` | Vercel + GitHub | no | The Alpha Hardscapes Sanity project ID. Without it the site builds from the built-in content. |
+| `NEXT_PUBLIC_ALPHA_SANITY_DATASET` | Vercel + GitHub | no | Usually `production` |
+| `SANITY_READ_TOKEN` | Vercel | yes | Optional. Only needed if the dataset is private. A **Viewer** token. |
+| `SANITY_API_TOKEN` | GitHub secret (or local shell) | **yes** | **Seed only.** An **Editor** token used by `npm run seed`. Never set it in Vercel. |
+| `SANITY_REVALIDATE_SECRET` | Vercel | yes | Shared secret for the publish webhook (any long random string) |
+| `VERCEL_DEPLOY_HOOK_URL` | Vercel | yes | Optional. Deploy hook the webhook calls so a full rebuild runs on publish |
+| `GHL_WEBHOOK_URL` | Vercel | yes | GoHighLevel inbound webhook that receives estimate requests |
+| `RESEND_API_KEY`, `LEAD_EMAIL_TO`, `LEAD_EMAIL_FROM` | Vercel | yes | Optional email copy of each lead |
+
+The `ALPHA` prefix is deliberate: a generic `NEXT_PUBLIC_SANITY_PROJECT_ID` that belongs to another TTR site cannot point this site at the wrong project.
+
+## 2. First deploy
+
+1. Import the repository in Vercel (framework: Next.js, defaults are fine).
+2. Add the variables above (at least `NEXT_PUBLIC_SITE_URL`, the two `NEXT_PUBLIC_ALPHA_SANITY_*` values, `SANITY_REVALIDATE_SECRET` and `GHL_WEBHOOK_URL`).
+3. Deploy. The site works immediately from the built-in content even before Sanity has anything in it.
+4. In Sanity (sanity.io/manage → the project → API → CORS origins) add `https://alphahardscapes.com`, `https://www.alphahardscapes.com`, the `*.vercel.app` preview address and `http://localhost:3000`, all with credentials, so the Studio at `/studio` can sign in.
+
+## 3. Seed the content (once)
+
+Run from a machine or CI job that has the three Sanity variables and `SANITY_API_TOKEN`:
+
+```bash
+npm ci
+npm run seed:dry      # preview: documents and photos that will be sent, no token needed
+npm run seed          # adds everything that does not exist yet (about 60 documents, ~190 photos)
+```
+
+`npm run seed -- --force` overwrites seeded documents with the built-in copy (use only to reset). The token is read from the environment only; the script never prints it.
+
+A GitHub Actions workflow is included at `.github/workflows/seed.yml`: run it manually from the Actions tab after adding the secrets.
+
+## 4. Publish → rebuild (webhook)
+
+The site caches CMS content for up to an hour. To make a publish show up within seconds and, optionally, trigger a full redeploy:
+
+1. In Vercel → Project → Settings → Git → **Deploy Hooks**: create a hook named "Sanity publish" on the production branch and copy its URL into `VERCEL_DEPLOY_HOOK_URL`. (Optional. Without it, publishes still go live through cache revalidation; the deploy hook additionally rebuilds every static page.)
+2. In sanity.io/manage → project → **API → Webhooks → Create webhook**:
+   - Name: `Rebuild alphahardscapes.com`
+   - URL: `https://alphahardscapes.com/api/revalidate`
+   - Dataset: `production`
+   - Trigger on: **Create, Update, Delete**
+   - Filter: leave empty (any document)
+   - Projection: leave empty
+   - HTTP method: POST, API version: `v2021-03-25` or later
+   - Secret: the same value as `SANITY_REVALIDATE_SECRET`
+3. Save. Publish something in the Studio and check the webhook's **Attempts** log in Sanity shows `200`. The response body reports `revalidated: true` and `redeploy: true` when the deploy hook was called.
+
+## 5. Going live on the domain
+
+- Point `alphahardscapes.com` and `www` at Vercel (Vercel shows the exact DNS records under Domains).
+- All old WordPress addresses are redirected (301) by `redirects.ts`; the blog keeps its `/blog/<slug>/` URLs.
+- **Google Ads landing pages** (`/1000-off/`, `/20pct-off/`, `/optin/`, `/patios-walkways/`) currently redirect to `/contact/`. Before launch, either re-point the ads to the new service pages or recreate those offers as pages in Sanity → Other pages and adjust `redirects.ts`.
+- Add the **Connecticut HIC registration number** to Site settings → Licence / insurance line (state law requires it on advertising).
+- Submit `https://alphahardscapes.com/sitemap.xml` in Google Search Console.
+
+## 6. Local development
+
+```bash
+cp .env.example .env.local   # fill in the Sanity project ID to use the CMS, or leave empty for built-in content
+npm install
+npm run dev                  # http://localhost:3000 and http://localhost:3000/studio
+npm test && npm run lint && npm run typecheck && npm run build
+```

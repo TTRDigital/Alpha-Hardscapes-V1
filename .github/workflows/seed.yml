@@ -1,0 +1,27 @@
+name: Seed Sanity (manual)
+
+# Run from the Actions tab once the secrets exist. Never run on push.
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Overwrite existing seeded documents (--force)"
+        type: boolean
+        default: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Seed
+        env:
+          NEXT_PUBLIC_ALPHA_SANITY_PROJECT_ID: ${{ vars.NEXT_PUBLIC_ALPHA_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_ALPHA_SANITY_DATASET: ${{ vars.NEXT_PUBLIC_ALPHA_SANITY_DATASET }}
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+        run: npm run seed -- ${{ inputs.force && '--force' || '' }}
