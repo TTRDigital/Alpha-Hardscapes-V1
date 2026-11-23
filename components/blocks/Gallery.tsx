@@ -25,7 +25,7 @@ export function Gallery({ images, columns = 3 }: { images: ImgT[]; columns?: 2 |
       <div className={`grid grid-cols-1 gap-4 ${cols}`}>
         {images.map((im, i) => (
           <button key={i} type="button" onClick={() => setOpen(i)} className="group relative aspect-[4/3] overflow-hidden rounded-lg bg-mist text-left" aria-label={`Open photo: ${im.alt}`}>
-            <Img image={im} fill sizes="(min-width: 1024px) 600px, (min-width: 640px) 70vw, 130vw" className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
+            <Img image={im} fill sizes={columns === 2 ? "(min-width: 640px) 900px, 130vw" : "(min-width: 1024px) 600px, (min-width: 640px) 70vw, 130vw"} className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
           </button>
         ))}
       </div>

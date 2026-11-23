@@ -20,11 +20,11 @@ export function ServiceCard({ service, priority, showExcerpt = true }: { service
   );
 }
 
-export function ProjectCard({ project, priority, aspect = "aspect-[4/3]" }: { project: ProjectSummary; priority?: boolean; tall?: boolean; aspect?: string }) {
+export function ProjectCard({ project, priority, aspect = "aspect-[4/3]", sizes = "(min-width: 1024px) 900px, (min-width: 640px) 70vw, 130vw" }: { project: ProjectSummary; priority?: boolean; tall?: boolean; aspect?: string; sizes?: string }) {
   return (
     <Link href={`/projects/${project.slug}/`} className="group block">
       <div className={`relative overflow-hidden rounded-lg bg-mist ${aspect}`}>
-        <Img image={project.coverImage} fill priority={priority} sizes="(min-width: 1024px) 640px, (min-width: 640px) 70vw, 130vw" className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
+        <Img image={project.coverImage} fill priority={priority} sizes={sizes} className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
       </div>
       <div className="mt-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
         <h3 className="h-sm text-ink">{project.title}</h3>

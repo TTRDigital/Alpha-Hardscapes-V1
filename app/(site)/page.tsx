@@ -83,7 +83,7 @@ export default async function HomePage() {
       {leadProject && (
         <Section id="projects">
           <SectionHeading index="03" eyebrow="Selected work" title={home.projectsHeading || "Recent projects"} text={home.projectsText} action={<Link href="/projects/" className="link-arrow">All projects →</Link>} />
-          <div className="mt-14"><ProjectCard project={leadProject} aspect="aspect-[4/3] sm:aspect-[21/9]" priority={false} /></div>
+          <div className="mt-14"><ProjectCard project={leadProject} aspect="aspect-[4/3] sm:aspect-[21/9]" sizes="(max-width: 767px) 200vw, 1320px" /></div>
           <div className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2">
             {moreProjects.map((p, i) => (<Reveal key={p.slug} delay={(i % 2) * 70}><ProjectCard project={p} /></Reveal>))}
           </div>
