@@ -49,6 +49,7 @@ What was done to follow "Alpha Hardscapes redesign: SEO rules", how it was check
 8. **Removed:** the gallery filter tabs (All, Patios, Retaining Walls, Paths, Stairs, Pools, Beds, Fire Pits, Fences). The gallery now shows all photos in one grid. Also removed: two blocks the live site hides on every device (home "Custom Landscape Design & Installation" box, a `/locations/` paragraph).
 9. **Alt text** written for 137 photos (section 1).
 10. **Photos:** AI and stock images replaced by real job photos, or dropped.
+11. **Design update after Kia's review (Nov 24):** the home banner's "Request a Quote" heading is reused as a button that scrolls to the quote form, which now sits in the dark closing section next to "Ready to Transform Your Outdoor Space?". The crew reel follows the banner directly. Section numbers (01, 02…) and the reel's pause and sound buttons and the carousels' previous and next arrows add no visible words. Blog post images: the AI banners were replaced by real job photos.
 
 ## 5. Live wording that conflicts with the content rules (left unchanged, needs a decision)
 

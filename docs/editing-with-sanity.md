@@ -38,7 +38,16 @@ A page has a **Main photo** at the top and **Page content** below it. Page conte
 | **Quote form** | One of the site's forms, shown on the page |
 | **Map**, **Video**, **Embed (HTML)** | Maps, videos and the GoHighLevel forms on the ad pages |
 
-The site chooses the layout by itself from the blocks in a section (for example a heading, text and one photo sit side by side; the last section with a button becomes the dark band at the bottom).
+The site chooses the layout by itself from the blocks in a section, so every page keeps the same calm look:
+
+- **Heading + text + one photo or video** → side by side.
+- **Heading + text + Feature boxes** → the heading and text on the left, the boxes as numbered rows on the right.
+- **Heading + Photo gallery** or **Reviews** → a swipeable row with arrows and a counter.
+- **Heading + FAQ** → heading on the left, questions on the right.
+- **The last section with only a heading, text and a button** → the dark band at the bottom of the page.
+- Sections are numbered automatically (01, 02, 03…).
+
+The first section's photo (the page's **Main photo**) fills the top of the page with the main heading over it. On the home page the top is the background video, and the first section holds the crew reel.
 
 ## How to change text
 
