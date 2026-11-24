@@ -74,11 +74,12 @@ export function LeadForm({ form, dark = false, className = "" }: { form: FormDef
     }
   }
 
-  const input = `peer h-12 w-full rounded-none border-0 border-b bg-transparent px-0 text-[16px] outline-none transition-colors placeholder:text-subtle focus:ring-0 ${dark ? "border-white/25 text-white placeholder:text-white/40 focus:border-white" : "border-line text-ink focus:border-ink"}`;
-  const labelCls = `block text-[13px] ${dark ? "text-white/60" : "text-muted"}`;
+  // Boxed fields on a stone background, label above: calm and easy to tap (48px tall).
+  const input = `mt-2 h-12 w-full rounded-xl border-0 px-4 text-[16px] outline-none ring-1 transition-shadow placeholder:text-subtle/80 focus:ring-2 ${dark ? "bg-white/5 text-white ring-white/20 placeholder:text-white/40 focus:ring-white" : "bg-paper text-ink ring-line focus:ring-ink"}`;
+  const labelCls = `block text-[13px] font-semibold ${dark ? "text-white/80" : "text-ink"}`;
 
   return (
-    <form onSubmit={onSubmit} onFocus={() => void loadRecaptcha()} className={`grid gap-5 ${className}`} noValidate={false}>
+    <form onSubmit={onSubmit} onFocus={() => void loadRecaptcha()} className={`grid gap-4 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5 ${className}`} noValidate={false}>
       {/* Honeypot: people never see or fill this */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor={`${id}-website`}>Website</label>
@@ -89,7 +90,7 @@ export function LeadForm({ form, dark = false, className = "" }: { form: FormDef
         const label = f.label || f.placeholder || f.id;
         if (f.type === "acceptance")
           return (
-            <label key={f.id} htmlFor={fid} className={`flex gap-3 text-[12.5px] leading-relaxed ${dark ? "text-white/60" : "text-muted"}`}>
+            <label key={f.id} htmlFor={fid} className={`flex gap-3 text-[12px] leading-relaxed sm:col-span-2 ${dark ? "text-white/60" : "text-muted"}`}>
               <input id={fid} name={f.id} type="checkbox" required={f.required} className="mt-1 h-4 w-4 shrink-0 accent-lime" />
               <span>{f.text || label}</span>
             </label>
@@ -106,7 +107,7 @@ export function LeadForm({ form, dark = false, className = "" }: { form: FormDef
           );
         if (f.type === "textarea")
           return (
-            <div key={f.id}>
+            <div key={f.id} className="sm:col-span-2">
               <label htmlFor={fid} className={labelCls}>{label}</label>
               <textarea id={fid} name={f.id} required={f.required} placeholder={f.placeholder} rows={3} className={`${input} h-auto py-3`} />
             </div>
@@ -114,13 +115,13 @@ export function LeadForm({ form, dark = false, className = "" }: { form: FormDef
         const type = f.type === "tel" || f.type === "email" ? f.type : "text";
         const auto = type === "tel" ? "tel" : type === "email" ? "email" : /name/i.test(label) ? "name" : /address/i.test(label) ? "street-address" : /zip/i.test(label) ? "postal-code" : undefined;
         return (
-          <div key={f.id}>
+          <div key={f.id} className={/address|message/i.test(label) ? "sm:col-span-2" : ""}>
             <label htmlFor={fid} className={labelCls}>{label}{f.required ? <span aria-hidden="true"> *</span> : null}</label>
             <input id={fid} name={f.id} type={type} required={f.required} placeholder={f.placeholder} autoComplete={auto} inputMode={type === "tel" ? "tel" : undefined} className={input} />
           </div>
         );
       })}
-      <div className="pt-1">
+      <div className="pt-1 sm:col-span-2">
         <button type="submit" disabled={status === "sending"} className={`${dark ? "btn-lime" : "btn-primary"} w-full disabled:opacity-60`}>
           {status === "sending" ? "Sending…" : form.button || "Send"}
         </button>

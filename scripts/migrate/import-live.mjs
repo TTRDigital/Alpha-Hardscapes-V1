@@ -120,6 +120,8 @@ function stem(src) {
 function isRealPhoto(src) {
   if (!src || DECOR.test(src)) return false;
   const s = stem(src);
+  // AI blog banners: 13-digit timestamp names ("1781705644887", "featured-1787…"), never real photos
+  if (/(^|\/|-)1\d{12}$/.test(s) || /featured-1\d{12}/.test(s)) return false;
   if (/^(2025\/09|2026\/07)\//.test(s)) return true;
   if (/sebastian/i.test(s)) return true;
   if (/-bna$/.test(s)) return true;
@@ -349,7 +351,20 @@ const TOPIC = [
   [/kitchen|outdoor-living|deck/, "2025-06-outdoor-image.webp"], [/repair/, "2026-07-walkway-2065.webp"],
   [/masonry|thinstone/, "2025-06-big-image.webp"],
 ];
+/** Posts whose live banner was an AI render get their own real photo of the work they discuss (no two alike). */
+const POST_PHOTO = {
+  "leaning-retaining-wall": "2026-07-retaining-wall-0313.webp", "natural-stone-vs-wall-block": "2026-07-retaining-wall-0282.webp",
+  "best-patio-materials": "2026-07-patio-0184.webp", "patio-installation-cost": "2026-07-patio-2077.webp", "outdoor-kitchen-cost": "2025-06-patio-8.webp",
+  "patio-around-outdoor-kitchen": "2026-07-patio-1258.webp", "fire-pit-vs-outdoor-fireplace": "2026-07-fire-pit-1804.webp", "fire-pit-on-paver-patio": "2026-07-fire-pit-2254.webp",
+  "pool-patio-materials": "2026-07-pool-1249.webp", "backyard-remodel-ideas": "2025-06-img-9324-1.webp", "small-backyard-patio-ideas": "2026-07-patio-6034.webp",
+  "paver-patio-vs-natural-stone": "2026-07-patio-2951.webp", "how-long-does-a-paver-patio-last": "2026-07-patio-2221.webp", "hardscape-upgrades-before-fall": "2026-07-patio-1805.webp",
+  "prepare-patio-for-winter": "2026-07-walkway-2065.webp", "patio-and-walkway-maintenance-checklist": "2026-07-walkway-0909.webp",
+  "hardscaping-pavers-contractor-complete-guide": "2026-07-patio-file-002.webp", "hardscaping-pavers-planning-your-outdoor-space": "2026-07-patio-techo-bloc-lafayette-pat.webp",
+  "automation-my-facebook-ad": "2026-07-patio-1804.webp",
+};
+const fileImg = (name) => { const f = path.join(OUT_IMG, name); if (!fs.existsSync(f)) return null; const [w, h] = execFileSync("identify", ["-format", "%w %h", f]).toString().split(" ").map(Number); return { src: `/images/site/${name}`, width: w, height: h, alt: ALT[`/images/site/${name}`] || "" }; };
 function heroFor(p) {
+  if (p.kind === "post" && !p.featuredImage) { const k = Object.keys(POST_PHOTO).find((x) => p.path.includes(x)); const im = k && fileImg(POST_PHOTO[k]); if (im) return im; }
   const first = p.sections.flatMap((s) => s.atoms).map((a) => (a._type === "img" ? a.image : a._type === "gallery" ? a.images[0] : null)).find(Boolean);
   if (first) return first;
   const hit = TOPIC.find(([re]) => re.test(p.path + " " + p.title.toLowerCase()));

@@ -2,13 +2,15 @@ import Link from "next/link";
 import Script from "next/script";
 import type { Atom, BoxAtom, ButtonAtom, FaqAtom, GalleryAtom, HeadingAtom, ListAtom, ReviewsAtom, SiteSettings } from "@/lib/types";
 import { RichText } from "@/components/blocks/RichText";
+import { ReelVideo } from "@/components/blocks/ReelVideo";
 import { Img } from "@/components/ui/Img";
 import { Icon } from "@/components/ui/Icon";
+import { Carousel } from "@/components/ui/Carousel";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { QuoteButton } from "@/components/forms/QuoteDialog";
 
 /* ---------- headings ---------- */
-const H_CLASS: Record<number, string> = { 1: "h-xl", 2: "h-lg", 3: "h-md", 4: "h-sm", 5: "label", 6: "label" };
+const H_CLASS: Record<number, string> = { 1: "h-xl", 2: "h-lg", 3: "h-md", 4: "h-sm", 5: "eyebrow", 6: "eyebrow" };
 
 export function Heading({ a, className = "", dark }: { a: HeadingAtom; className?: string; dark?: boolean }) {
   const level = Math.min(Math.max(a.level || 2, 1), 6);
@@ -20,15 +22,15 @@ export function Heading({ a, className = "", dark }: { a: HeadingAtom; className
       {l}
     </span>
   ));
-  const cls = `${H_CLASS[level]} ${level >= 5 && dark ? "!text-white/60" : ""} ${className}`;
+  const cls = `${level >= 5 && dark ? "eyebrow-light" : H_CLASS[level]} ${className}`;
   return <Tag className={cls}>{a.href ? <SmartLink href={a.href} className="hover:underline">{text}</SmartLink> : text}</Tag>;
 }
 
 /* ---------- links and buttons ---------- */
-export function SmartLink({ href, className, children, ariaLabel }: { href: string; className?: string; children: React.ReactNode; ariaLabel?: string }) {
-  if (/^(tel|mailto):|^#/.test(href)) return <a href={href} className={className} aria-label={ariaLabel}>{children}</a>;
-  if (/^https?:\/\//.test(href)) return <a href={href} className={className} target="_blank" rel="noopener noreferrer" aria-label={ariaLabel}>{children}</a>;
-  return <Link href={href} className={className} aria-label={ariaLabel}>{children}</Link>;
+export function SmartLink({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
+  if (/^(tel|mailto):|^#/.test(href)) return <a href={href} className={className}>{children}</a>;
+  if (/^https?:\/\//.test(href)) return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}</a>;
+  return <Link href={href} className={className}>{children}</Link>;
 }
 
 const GENERIC = /^(learn more|read more|click here|see more|more)$/i;
@@ -37,18 +39,18 @@ export function Buttons({ items, dark, className = "", context }: { items: Butto
   return (
     <div className={`flex flex-wrap items-center gap-3 ${className}`}>
       {items.map((b, i) => {
-        const cls = i === 0 ? (dark ? "btn-lime" : "btn-primary") : dark ? "btn-outline-light" : "btn-outline";
+        const tel = b.href?.startsWith("tel:");
+        const cls = i === 0 && !tel ? "btn-primary" : dark ? "btn-outline-light" : "btn-outline";
         const generic = GENERIC.test(b.label.trim()) && context;
         const label = (
           <>
-            {b.href?.startsWith("tel:") && <Icon name="phone" className="h-4 w-4" />}
+            {tel && <Icon name="phone" className="h-3.5 w-3.5" />}
             {b.label}
             {generic && <span className="sr-only">: {context.replace(/:$/, "")}</span>}
-            {i === 0 && !b.href?.startsWith("tel:") && <Icon name="arrow" className="h-4 w-4" />}
+            {i === 0 && !tel && <Icon name="arrow" className="h-3.5 w-3.5" />}
           </>
         );
         if (b.formKey && !b.href) return <QuoteButton key={b._key} formKey={b.formKey} className={cls}>{label}</QuoteButton>;
-        // Generic labels ("Learn More") carry the section heading as screen-reader text
         return <SmartLink key={b._key} href={b.href || "/contact/"} className={cls}>{label}</SmartLink>;
       })}
     </div>
@@ -60,48 +62,45 @@ export const isPhoneBox = (a: Atom): boolean => a._type === "box" && !!a.href?.s
 
 export function PhoneLink({ a, dark }: { a: BoxAtom; dark?: boolean }) {
   return (
-    <a href={a.href} className={`inline-flex items-center gap-2 text-[15px] font-medium ${dark ? "text-white" : "text-ink"} hover:underline`}>
+    <a href={a.href} className={`inline-flex items-center gap-2.5 text-[13px] font-semibold tracking-[0.08em] ${dark ? "text-white" : "text-ink"} hover:underline`}>
       <Icon name="phone" className="h-4 w-4" />
       {a.title}
     </a>
   );
 }
 
-/* ---------- feature boxes ---------- */
-export function Boxes({ items, dark }: { items: BoxAtom[]; dark?: boolean }) {
-  const n = items.length;
-  const cols = n === 1 ? "" : n === 2 || n === 4 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3";
+/* ---------- feature boxes: an editorial list of ruled rows (no card grid) ---------- */
+export function Boxes({ items, dark, compact = false }: { items: BoxAtom[]; dark?: boolean; compact?: boolean }) {
   return (
-    <div className={`grid gap-x-10 gap-y-10 ${cols}`}>
+    <ol className={`border-b ${dark ? "border-white/15" : "border-line"}`}>
       {items.map((b, i) => {
         const body = (
-          <>
-            <span className={`font-mono text-[12px] ${dark ? "text-white/40" : "text-subtle"}`}>{String(i + 1).padStart(2, "0")}</span>
-            {b.title && <h3 className={`mt-4 text-[1.15rem] font-medium leading-snug tracking-[-0.015em] ${dark ? "text-white" : "text-ink"}`}>{b.title}</h3>}
-            {b.text && <p className={`mt-2 text-[15.5px] leading-relaxed ${dark ? "text-white/65" : "text-muted"}`}>{b.text}</p>}
-            {!!b.body?.length && <RichText value={b.body} plain className={`mt-3 text-[15px] leading-relaxed ${dark ? "text-white/65" : "text-muted"} [&_li]:relative [&_li]:pl-4 [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-[0.7em] [&_li]:before:h-1 [&_li]:before:w-1 [&_li]:before:rounded-full [&_li]:before:bg-lime-600 [&_strong]:font-medium [&_strong]:text-ink [&_ul]:mt-2 [&_ul]:grid [&_ul]:gap-1.5 [&_p+p]:mt-2`} />}
-          </>
-        );
-        return (
-          <div key={b._key} className={`border-t pt-5 ${dark ? "border-white/15" : "border-line"}`}>
-            {b.href ? <SmartLink href={b.href} className="group block">{body}</SmartLink> : body}
+          <div className={`grid gap-x-8 gap-y-2 border-t py-7 ${dark ? "border-white/15" : "border-line"} ${compact ? "grid-cols-[2.5rem_1fr]" : "grid-cols-[2.5rem_1fr] md:grid-cols-[3rem_minmax(0,5fr)_minmax(0,7fr)]"}`}>
+            <span className={`pt-1 font-sans text-[11px] font-semibold tracking-[0.2em] ${dark ? "text-lime-light" : "text-lime-ink"}`} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            {b.title && <h3 className={`h-sm ${dark ? "text-white" : "text-ink"} ${b.href ? "group-hover:underline" : ""}`}>{b.title}</h3>}
+            <div className={`${compact ? "col-start-2" : "col-start-2 md:col-start-3"} ${b.title ? "" : "md:col-start-2 md:col-span-2"}`}>
+              {b.text && <p className={`text-[15.5px] leading-[1.85] ${dark ? "text-white/70" : "text-muted"}`}>{b.text}</p>}
+              {!!b.body?.length && <RichText value={b.body} plain className={`mt-3 text-[15px] leading-[1.8] ${dark ? "text-white/70" : "text-muted"} [&_li]:relative [&_li]:pl-5 [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-[0.85em] [&_li]:before:h-px [&_li]:before:w-2.5 [&_li]:before:bg-lime-ink [&_strong]:font-semibold [&_strong]:text-ink [&_ul]:mt-2 [&_ul]:grid [&_ul]:gap-1.5 [&_p+p]:mt-2`} />}
+            </div>
           </div>
         );
+        return <li key={b._key}>{b.href ? <SmartLink href={b.href} className="group block">{body}</SmartLink> : body}</li>;
       })}
-    </div>
+    </ol>
   );
 }
 
 /* ---------- lists ---------- */
 /** A list item that already holds links in its text cannot be wrapped in another link. */
 const hasLink = (body: ListAtom["items"][number]["body"]) => body.some((b) => ((b as { markDefs?: { _type: string }[] }).markDefs || []).some((d) => d._type === "link"));
+
 export function CheckList({ a, dark }: { a: ListAtom; dark?: boolean }) {
   return (
-    <ul className="grid gap-3">
+    <ul className="grid gap-3.5">
       {a.items.map((it) => (
-        <li key={it._key} className={`flex gap-3 text-[16px] leading-relaxed ${dark ? "text-white/80" : "text-ink-700"}`}>
-          <span className={`mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full ${dark ? "bg-lime" : "bg-lime-600"}`} aria-hidden="true" />
-          <div className="[&_a]:underline [&_a]:decoration-line [&_a]:underline-offset-4 [&_strong]:font-medium [&_strong]:text-current [&_p]:inline">
+        <li key={it._key} className={`flex gap-4 text-[15.5px] leading-[1.85] ${dark ? "text-white/75" : "text-muted"}`}>
+          <span className={`mt-[0.85em] h-px w-3.5 shrink-0 ${dark ? "bg-lime-light" : "bg-lime-ink"}`} aria-hidden="true" />
+          <div className="[&_a]:underline [&_a]:decoration-line-deep [&_a]:underline-offset-4 [&_strong]:font-semibold [&_strong]:text-current [&_p]:inline">
             {it.href && !hasLink(it.body) ? <SmartLink href={it.href}><RichText plain value={it.body} /></SmartLink> : <RichText plain value={it.body} />}
           </div>
         </li>
@@ -113,14 +112,14 @@ export function CheckList({ a, dark }: { a: ListAtom; dark?: boolean }) {
 /* ---------- FAQ ---------- */
 export function FaqList({ a }: { a: FaqAtom }) {
   return (
-    <div className="divide-y divide-line border-y border-line">
+    <div className="border-b border-line">
       {a.items.map((q) => (
-        <details key={q._key} className="faq group">
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[1.05rem] font-medium leading-snug">
-            <span>{q.question}</span>
-            <span className="faq-icon mt-0.5 shrink-0 text-xl leading-none text-muted transition-transform duration-200" aria-hidden="true">+</span>
+        <details key={q._key} className="faq group border-t border-line">
+          <summary className="flex cursor-pointer list-none items-start justify-between gap-8 py-6">
+            <span className="h-sm text-ink">{q.question}</span>
+            <span className="faq-icon mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg leading-none text-ink ring-1 ring-ink/15 transition-transform duration-200" aria-hidden="true">+</span>
           </summary>
-          <div className="pb-6 pr-10 text-[16px] leading-relaxed text-muted [&_a]:text-ink [&_a]:underline [&_p+p]:mt-3 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5">
+          <div className="pb-7 pr-12 text-[15.5px] leading-[1.9] text-muted [&_a]:text-ink [&_a]:underline [&_p+p]:mt-3 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5">
             <RichText plain value={q.answer} />
           </div>
         </details>
@@ -129,39 +128,51 @@ export function FaqList({ a }: { a: FaqAtom }) {
   );
 }
 
-/* ---------- reviews (text only, no star ratings) ---------- */
-export function Reviews({ a }: { a: ReviewsAtom }) {
+/* ---------- reviews (text only, no star ratings), in a carousel ---------- */
+export function Reviews({ a, dark }: { a: ReviewsAtom; dark?: boolean }) {
   return (
-    <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+    <Carousel label="Client reviews" slideClass="w-[86%] sm:w-[48%] lg:w-[31%]" dark={dark}>
       {a.items.map((r) => (
-        <figure key={r._key} className="flex w-[85vw] shrink-0 snap-start flex-col justify-between rounded-2xl bg-white p-7 ring-1 ring-line sm:w-auto">
-          <blockquote className="text-[15.5px] leading-relaxed text-ink-700">
-            <Icon name="quote" className="mb-4 h-5 w-5 text-lime-600" />
-            <p className="whitespace-pre-line">{r.text}</p>
+        <figure key={r._key} className="card flex h-full flex-col justify-between p-8">
+          <blockquote>
+            <span className="block font-display text-[3.25rem] leading-[0.6] text-lime-ink" aria-hidden="true">“</span>
+            <p className="mt-4 whitespace-pre-line text-[15.5px] leading-[1.85] text-muted">{r.text}</p>
           </blockquote>
           {(r.name || r.meta) && (
-            <figcaption className="mt-6 border-t border-line pt-4 text-[14px]">
-              {r.name && <span className="font-medium text-ink">{r.name}</span>}
-              {r.meta && <span className="block text-muted">{r.meta}</span>}
+            <figcaption className="mt-7 border-t border-line pt-5">
+              {r.name && <span className="block font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ink">{r.name}</span>}
+              {r.meta && <span className="mt-1 block text-[13px] text-subtle">{r.meta}</span>}
             </figcaption>
           )}
         </figure>
       ))}
-    </div>
+    </Carousel>
   );
 }
 
 /* ---------- media ---------- */
+/** Project photos: a calm carousel of large photos on pages, a tidy grid on the gallery page. */
 export function Gallery({ a }: { a: GalleryAtom }) {
-  const cols = a.large ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : a.images.length <= 4 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+  if (a.large)
+    return (
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
+        {a.images.map((im, i) => (
+          <figure key={`${im.src}-${i}`} className="media relative aspect-[4/3]">
+            <Img image={im} fill loading="lazy" sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 50vw" className="object-cover" />
+          </figure>
+        ))}
+      </div>
+    );
   return (
-    <div className={`grid gap-2 sm:gap-3 ${cols}`}>
+    <Carousel label="Project photos" slideClass="w-[84%] sm:w-[62%] lg:w-[46%]">
       {a.images.map((im, i) => (
-        <div key={`${im.src}-${i}`} className="relative aspect-[4/3] overflow-hidden rounded-lg bg-mist">
-          <Img image={im} fill loading="lazy" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" className="object-cover transition-transform duration-700 hover:scale-[1.03]" />
-        </div>
+        <figure key={`${im.src}-${i}`}>
+          <div className="media relative aspect-[4/3]">
+            <Img image={im} fill loading="lazy" sizes="(min-width: 1280px) 600px, (min-width: 640px) 62vw, 84vw" className="object-cover" />
+          </div>
+        </figure>
       ))}
-    </div>
+    </Carousel>
   );
 }
 
@@ -169,23 +180,20 @@ export function Video({ url, className = "" }: { url: string; className?: string
   const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
   if (yt)
     return (
-      <div className={`relative aspect-video overflow-hidden rounded-2xl bg-ink ${className}`}>
+      <div className={`media relative aspect-video ${className}`}>
         <iframe src={`https://www.youtube-nocookie.com/embed/${yt[1]}`} title="Video" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute inset-0 h-full w-full" />
       </div>
     );
   const poster = url.endsWith(".mp4") ? url.replace(/\.mp4$/, "-poster.webp") : undefined;
   const vertical = /vertical/.test(url);
-  return (
-    <video controls playsInline preload="none" poster={poster} className={`w-full rounded-2xl bg-ink object-cover ${vertical ? "aspect-[2/3] max-h-[640px]" : "aspect-video"} ${className}`}>
-      <source src={url} type="video/mp4" />
-    </video>
-  );
+  // Local project footage plays muted on screen like a short film, with pause and sound buttons.
+  return <ReelVideo src={url} poster={poster} className={`${vertical ? "aspect-[4/5]" : "aspect-video"} ${className}`} />;
 }
 
 export function MapEmbed({ title, url }: { title?: string; url: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-mist ring-1 ring-line">
-      <iframe src={url} title={title || "Map"} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="h-[340px] w-full grayscale-[35%] sm:h-[400px]" />
+    <div className="media">
+      <iframe src={url} title={title || "Map"} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="h-[340px] w-full grayscale-[40%] sepia-[8%] sm:h-[420px]" />
     </div>
   );
 }
@@ -196,19 +204,19 @@ export function HtmlEmbed({ html }: { html: string }) {
   const clean = html.replace(/<script[\s\S]*?<\/script>/gi, "");
   return (
     <>
-      <div id="quote-form" className="w-full scroll-mt-24 [&_iframe]:w-full" style={h ? { minHeight: h } : undefined} dangerouslySetInnerHTML={{ __html: clean.replace(/height:100%/, `height:${h ? `${h}px` : "100%"}`) }} />
+      <div id="quote-form" className="w-full scroll-mt-28 [&_iframe]:w-full" style={h ? { minHeight: h } : undefined} dangerouslySetInnerHTML={{ __html: clean.replace(/height:100%/, `height:${h ? `${h}px` : "100%"}`) }} />
       {/leadconnectorhq|msgsndr/.test(html) && <Script src="https://link.msgsndr.com/js/form_embed.js" strategy="lazyOnload" />}
     </>
   );
 }
 
-export function FormCard({ formKey, settings, heading, dark }: { formKey: string; settings: SiteSettings; heading?: HeadingAtom; dark?: boolean }) {
+export function FormCard({ formKey, settings, heading, className = "" }: { formKey: string; settings: SiteSettings; heading?: HeadingAtom; dark?: boolean; className?: string }) {
   const form = settings.forms.find((f) => f.formKey === formKey) || settings.forms.find((f) => f.formKey.split(":")[0] === formKey.split(":")[0]);
   if (!form) return null;
   return (
-    <div id="quote-form" className={`scroll-mt-24 rounded-2xl p-6 sm:p-8 ${dark ? "bg-ink text-white ring-1 ring-white/10" : "bg-white ring-1 ring-line"}`}>
-      {heading && <Heading a={heading} className={`mb-6 !text-[1.6rem] ${dark ? "text-white" : ""}`} />}
-      <LeadForm form={form} dark={dark} />
+    <div id="quote-form" className={`card scroll-mt-28 p-6 sm:p-9 ${className}`}>
+      {heading && <Heading a={heading} className="mb-7 !text-[2rem] text-ink" />}
+      <LeadForm form={form} />
     </div>
   );
 }

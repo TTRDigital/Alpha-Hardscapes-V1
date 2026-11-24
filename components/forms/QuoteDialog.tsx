@@ -31,13 +31,13 @@ export function QuoteProvider({ forms, heading, children }: { forms: FormDef[]; 
         aria-labelledby="quote-title"
         onClose={() => setForm(null)}
         onClick={(e) => { if (e.target === ref.current) ref.current?.close(); }}
-        className="m-auto max-h-[92dvh] w-[min(560px,calc(100vw-24px))] overflow-y-auto rounded-2xl bg-paper p-0 text-ink shadow-2xl backdrop:bg-ink/60 backdrop:backdrop-blur-sm"
+        className="m-auto max-h-[92dvh] w-[min(640px,calc(100vw-24px))] overflow-y-auto rounded-[24px] bg-white p-0 text-ink shadow-2xl backdrop:bg-basalt/70 backdrop:backdrop-blur-sm"
       >
         {form && (
           <div className="p-6 sm:p-9">
             <div className="mb-6 flex items-start justify-between gap-6">
-              <p id="quote-title" className="h-md">{heading}</p>
-              <button type="button" onClick={() => ref.current?.close()} className="-mr-2 -mt-1 rounded-full p-2 text-muted hover:bg-mist hover:text-ink" aria-label="Close">
+              <p id="quote-title" className="h-lg !text-[2.1rem] text-ink">{heading}</p>
+              <button type="button" onClick={() => ref.current?.close()} className="-mr-2 -mt-1 flex h-10 w-10 items-center justify-center rounded-full text-ink ring-1 ring-ink/15 hover:bg-paper" aria-label="Close">
                 <Icon name="close" className="h-5 w-5" />
               </button>
             </div>
