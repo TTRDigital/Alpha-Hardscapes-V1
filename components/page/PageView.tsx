@@ -251,7 +251,7 @@ export function PostView({ page, settings, related }: Props & { related: PostLit
       {img && (
         <div className="container-x">
           <div className="media relative aspect-[16/9] lg:aspect-[21/9]">
-            <Img image={img} fill preload fetchPriority="high" quality={75} sizes="(min-width: 1280px) 1200px, calc(100vw - 40px)" className="object-cover" />
+            <Img image={img} fill preload fetchPriority="high" quality={65} sizes="(min-width: 1280px) 1200px, calc(100vw - 40px)" className="object-cover" />
           </div>
         </div>
       )}
