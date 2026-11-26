@@ -9,3 +9,4 @@ out
 .sanity
 scratch
 tsconfig.tsbuildinfo
+reports/
