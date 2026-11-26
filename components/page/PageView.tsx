@@ -75,7 +75,9 @@ function Intro({ rest, form, formHeading, settings }: { rest: Atom[]; form?: Ato
 export function PageView({ page, settings }: Props) {
   const { hero, rest } = splitHero(page);
   const heroImg = page.heroImage;
-  const sections = withoutImage(rest, heroImg);
+  // The page photo is only shown at the top when the page opens with its main heading; only then
+  // is the same photo left out further down (otherwise it would be missing from the page).
+  const sections = hero ? withoutImage(rest, heroImg) : rest;
   if (!hero) {
     return (
       <div className="pt-20">
